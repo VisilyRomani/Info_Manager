@@ -52,7 +52,8 @@
 }
 
 .nav-menu-items{
-    width: 100%;
+    width: 1000%;
+    padding:0;
 }
 
 .navbar-togle{

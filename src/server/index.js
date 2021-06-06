@@ -1,12 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-app.use(cors());
+const controller = require('./authController');
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true
+    }
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
+app.use(cors(corsOptions));
+app.use(cookieParser());
+app.use(express.urlencoded());
+app.use(express.json());
 
-
-// TODO remove all socketjwt bull and use sessions
-// TODO connect to heroku server for database pull of users
 const server = require('http').Server(app);
+
+app.post('/auth/login', controller.signin);
+
+// app.post('/auth/register', controller.reg);
+
+app.get('/auth/jwt', controller.check);
 
 
 
@@ -19,7 +33,7 @@ const io = module.exports.io = require("socket.io")(server, {
             "Access-Control-Allow-Origin": "http://localhost:3000",
             "Access-Control-Allow-Methods": "GET,POST",
             "Access-Control-Allow-Headers": "my-custom-header",
-            // "Access-Control-Allow-Credentials": true
+            "Access-Control-Allow-Credentials": true
 
         });
     }
@@ -32,7 +46,6 @@ const SocketManager = require('./SocketManager');
 // app.use(express.static(__dirname + '/../../build'));
 
 io.on('connection', SocketManager);
-
 server.listen(PORT, ()=>{
     console.log(`connected on ` + PORT);
 });

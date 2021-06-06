@@ -2,20 +2,23 @@ import React, {useState, useRef, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {NavData} from './NavData'
 import * as FaIcons from 'react-icons/fa';
-import {IconContext} from 'react-icons'
+import {IconContext} from 'react-icons' 
+import {Button} from 'react-bootstrap'
 import './Nav.css'
 
 
 
-function Nav() {
+function Nav(props) {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
     const closeSide = useRef();
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClick);
+        let mounted = true;
+        if (mounted) document.addEventListener('mousedown', handleClick);
         return () => {
             document.removeEventListener('mousedown',handleClick);
+            mounted=false;
         }
     }, [])
 
@@ -23,8 +26,12 @@ function Nav() {
         if (!closeSide.current.contains(e.target)){
             setSidebar(false)
             return;
-            
         }
+    }
+
+    const Logout = () => {
+        window.location.reload();
+        document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
     }
 
     return (
@@ -34,15 +41,10 @@ function Nav() {
                 <Link to="#" className='menu-bar'>
                 <FaIcons.FaBars onClick={showSidebar}/>
                 </Link>
-
+                <Button onClick={Logout}>logout</Button>
             </div>
             <nav ref={closeSide} className={sidebar ? 'nav-menu active' : 'nav-menu'}>
                 <ul className='nav-menu-items' onClick={showSidebar}>
-                    {/* <li className='navbar-toggle'>
-                        <Link to='#' className='menu-bars'>
-                            <AiIcons.AiOutlineClose/>
-                        </Link>
-                    </li> */}
                     {NavData.map((item,index) =>{
                         return (
                             <li key={index} className={item.cName}>
