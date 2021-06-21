@@ -1,3 +1,4 @@
+const PORT = process.env.PORT || 5000;
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -42,7 +43,6 @@ const io = module.exports.io = require("socket.io")(server, {
     
 });
 
-const PORT = process.env.PORT || 5000;
 
 // app.use(express.static(__dirname + '/../../build'));
 let connectCounter=0;
