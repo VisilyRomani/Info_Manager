@@ -33,6 +33,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    
     "start": "concurrently 'npm run react' 'npm run server",
     "react": "react-scripts start",
     "server": "nodemon src/server/index.js",
