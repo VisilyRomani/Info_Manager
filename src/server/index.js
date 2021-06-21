@@ -44,7 +44,7 @@ const io = module.exports.io = require("socket.io")(server, {
 });
 
 
-// app.use(express.static(__dirname + '/../../build'));
+app.use(express.static(__dirname + '/../../build'));
 let connectCounter=0;
 io.on('connection', socket => {
     console.log(connectCounter)
