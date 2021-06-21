@@ -162,6 +162,7 @@ function Home() {
             </div>
         )        
     }
+    console.log(weekDates + jobs)
     return (
         <div>
             {/* loading */}

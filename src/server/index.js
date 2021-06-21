@@ -20,6 +20,7 @@ app.use(express.urlencoded());
 app.use(express.json());
 app.use(function(req, res, next) {
     res.setHeader("Content-Security-Policy", "script-src 'self'");
+    res.setHeader("Content-Security-Policy", "img-src 'self'");
     return next();
 });
 
@@ -39,7 +40,7 @@ const io = module.exports.io = require("socket.io")(server, {
     },
     handlePreflightRequest: (req,res) => {
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000/" || 'https://sprouts-control-center.herokuapp.com',
+            "Access-Control-Allow-Origin": origins,
             "Access-Control-Allow-Methods": "GET,POST",
             "Access-Control-Allow-Headers": "my-custom-header",
             "Access-Control-Allow-Credentials": true
