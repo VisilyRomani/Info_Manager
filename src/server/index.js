@@ -39,7 +39,7 @@ const io = module.exports.io = require("socket.io")(server, {
     },
     handlePreflightRequest: (req,res) => {
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:5000/",
+            "Access-Control-Allow-Origin": "http://localhost:3000/" || 'https://sprouts-control-center.herokuapp.com',
             "Access-Control-Allow-Methods": "GET,POST",
             "Access-Control-Allow-Headers": "my-custom-header",
             "Access-Control-Allow-Credentials": true
