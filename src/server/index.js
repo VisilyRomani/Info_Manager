@@ -1,6 +1,6 @@
 const PORT = process.env.PORT || 5000;
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 const app = express();
 const controller = require('./authController');
 // const corsOptions = {
