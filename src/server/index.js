@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const controller = require('./authController');
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '/',
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     credentials: true
     }
@@ -29,11 +29,11 @@ app.get('/auth/jwt', controller.check);
 
 const io = module.exports.io = require("socket.io")(server, {
     cors:{
-        origins:["http://localhost:3000"],
+        origins:["/"],
     },
     handlePreflightRequest: (req,res) => {
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
+            "Access-Control-Allow-Origin": "/",
             "Access-Control-Allow-Methods": "GET,POST",
             "Access-Control-Allow-Headers": "my-custom-header",
             "Access-Control-Allow-Credentials": true
