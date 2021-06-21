@@ -1,6 +1,7 @@
 const PORT = process.env.PORT || 5000;
 const express = require('express');
 const cors = require('cors');
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 const app = express();
 const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000' ]
 const controller = require('./authController');
@@ -18,11 +19,16 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
-app.use(function(req, res, next) {
-    res.setHeader("Content-Security-Policy", "script-src 'self'");
-    res.setHeader("Content-Security-Policy", "img-src 'self'");
-    return next();
-});
+app.use(expressCspHeader({
+    directives: {
+        'default-src': [SELF],
+        'script-src': [SELF],
+        'style-src': [SELF],
+        'img-src': [SELF],
+        'worker-src': [NONE],
+        'block-all-mixed-content': true
+    }
+}));
 
 const server = require('http').Server(app);
 
