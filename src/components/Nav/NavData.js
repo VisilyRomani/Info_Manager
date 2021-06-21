@@ -5,19 +5,19 @@ import * as IoIcons from 'react-icons/io5';
 export const NavData = [
     {
         title:'Schedule',
-        path:"/",
+        path:"/home",
         icon:<AiIcons.AiFillHome />,
         cName:'nav-text'
     },
     {
-        title:'Calender',
-        path:"/calender",
+        title:'Calendar',
+        path:"/calendar",
         icon:<AiIcons.AiFillCalendar/>,
         cName:'nav-text'
     },
     {
         title:'Time Sheet',
-        path:"/time-sheet",
+        path:"/timesheet",
         icon:<IoIcons.IoPeople/>,
         cName:'nav-text'
     },

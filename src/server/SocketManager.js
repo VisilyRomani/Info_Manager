@@ -1,15 +1,28 @@
-const io = require('./index.js').io;
-const socketJWT = require('socketio-jwt');
+// const db = require("./database");
+// const io = require('./index.js').io;
+
+// module.exports = (socket) =>{
+//     io.on("connection", (socket)=> {
 
 
-module.exports = (socket) =>{
-    socket.on("connection",socketJWT.authorize({
-        secret:"test",
-        timeout:15000
-    })).on('authenticated', (socket)=> {
-        console.log('auth yee')
-    });
+//         socket.on('disconnect', function () {
+//             console.log('disconnected')
+//         });
 
-    console.log("id " + socket.id);
-}
+//         socket.on('pgInit', (dates) => {
+//             console.log(dates);
+//             jobLookup(dates)
+//         });
+    
+//         const jobLookup = async (dates) => {
+//             // db.any('SELECT * FROM jobs WHERE book_date between $1 AND $2', dates).then((data)=> {
+//             //     socket.emit('initJobs', data);
+//             // });
+//             db.any('SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2', dates).then((data)=> {
+//                 socket.emit('initJobs', data);
+//             });
+//         }
+//     });
+// }
+
 

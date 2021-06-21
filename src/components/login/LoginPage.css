@@ -1,0 +1,58 @@
+body, html {
+    height: 100vh;
+    margin: 0;
+}
+  
+  .bg {
+    /* The image used */
+    background-image: url("../../asset/background2.jpg");
+
+    /* Full height */
+    height: 100vh; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    position: relative;  
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+  }
+  .DisAlert{
+    color:red;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+
+.logo{
+  display: flex;
+  justify-content: center;  
+  height: 40%;
+  /* width: 100%; */
+  -webkit-filter: invert(100%); /* safari 6.0 - 9.0 */
+  filter: invert(100%);
+}
+
+
+.loginForm.formFlex{
+    background-color: white;
+    position: absolute;
+    height: 40%;
+    width: 30%;
+    min-height: fit-content;
+    min-width: fit-content;
+    left: 50%;                        /* horizontal alignment */
+    top: 50%;                         /* vertical alignment */
+    transform: translate(-50%, -50%); /* precise centering; see link below */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formItem{
+  width: fit-content;
+  width: 90%;
+}
+
