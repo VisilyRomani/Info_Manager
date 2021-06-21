@@ -3,11 +3,11 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const controller = require('./authController');
-const corsOptions = {
-    origin: '/',
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    credentials: true
-    }
+// const corsOptions = {
+//     origin: '/',
+//     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+//     credentials: true
+//     }
 const cookieParser = require('cookie-parser');
 const db = require("./database");
 
