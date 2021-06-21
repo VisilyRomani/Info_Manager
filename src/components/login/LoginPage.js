@@ -28,21 +28,21 @@ const LoginPage = (props) => {
     const DismissableAlert = () => {
         if (show) {
             return (
-                <text className='DisAlert'> {message}</text>
+                <div className='DisAlert'> {message}</div>
             )
         }else{
             return(<></>)
         }
     }
     
-    const handleLogin = async (e) =>{
+    const handleLogin = (e) =>{
         e.preventDefault();
         setMessage('');
         if(!username || !password){
             setMessage(' - This field is required.')
             setShow(true);
         }else{
-            await authService.login(username, password).then( ()=> {
+             authService.login(username, password).then( ()=> {
                 props.history.push('/home');
             },
                 (error) => {

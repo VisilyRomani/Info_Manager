@@ -1,4 +1,87 @@
-.jobContainer{
-    background-color: rgb(241, 241, 241);
-    height: 50vh;
+
+
+.weekButtons{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+#dispMonth{
+    font-size: 50px;
+    text-align: center;
+}
+
+.PrevButton, .NextButton {
+    background-color: transparent;
+    border: 2px solid rgb(190, 190, 190);
+    color: rgb(190, 190, 190);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 2;
+    margin: 1.5px;
+    width: 10vh;
+}
+.PrevButton:hover{
+    color: rgb(90, 90, 90);
+    border: 3px solid rgb(90, 90, 90);
+
+}
+.NextButton:hover{
+    border: 3px solid rgb(90, 90, 90);
+    color: rgb(90, 90, 90);
+}
+
+
+
+
+
+/* 
+####################
+
+Days of week in the home page
+
+####################
+*/
+.mainData{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+}
+.topLevelJob{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background-color: white;
+}
+/* .topLevelJob */
+.box{
+    display: flex;
+    border-top: rgba(128, 128, 128, 0.288) 1px solid;
+    /* align-items: center; */
+    height: 100%;
+}
+.altrItem{
+    background-color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.altrItem:nth-child(odd) {
+    background-color: rgba(202, 202, 202, 0.205);}
+
+.AddIcon{
+    width: auto;
+    height: 5vh;
+}
+
+.weekDate{
+    padding: 10px;
+    width: 100vw;
+    margin-bottom: 0;
+}
+.numJobs{
+    padding-left: 5vw;
+    padding-bottom: 20px;
 }

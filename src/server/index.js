@@ -8,6 +8,8 @@ const corsOptions = {
     credentials: true
     }
 const cookieParser = require('cookie-parser');
+const db = require("./database");
+
 require('dotenv').config();
 app.use(cors(corsOptions));
 app.use(cookieParser());
@@ -37,15 +39,31 @@ const io = module.exports.io = require("socket.io")(server, {
 
         });
     }
+    
 });
 
 const PORT = process.env.PORT || 5000;
 
-const SocketManager = require('./SocketManager');
-
 // app.use(express.static(__dirname + '/../../build'));
+let connectCounter=0;
+io.on('connection', socket => {
+    console.log(connectCounter)
+    connectCounter++; 
+    
+    socket.on('pgInit', (dates) => {
 
-io.on('connection', SocketManager);
+        db.any('SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2', dates).then((data)=> {
+            socket.emit('initJobs', data);
+            console.log(data);
+        });
+    });
+
+    socket.on('disconnect', () => {
+        socket.removeAllListeners();
+        connectCounter--;
+     });
+});
+
 server.listen(PORT, ()=>{
     console.log(`connected on ` + PORT);
 });

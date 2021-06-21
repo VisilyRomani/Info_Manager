@@ -1,51 +1,124 @@
 import React, {useState, useEffect} from 'react';
+import {Modal, Button, } from 'react-bootstrap';
 import * as AiIcons from 'react-icons/ai'; 
-import {socket} from '../socket'
+import {socket} from '../socket';
 import './home.css';
-// import io from 'socket.io-client';
-// const socketURL = 'http://localhost:5000';
-// const socket = io(socketURL);
 
-
-const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday','Friday', 'Saturday', 'Sunday'];
 function Home() {
-    const [jobs, setJobs] = useState([]);
-    const [weekDates, setWeekDates] = useState([]);
-
     // use to set initial state for days of week
+    const [weekDates, setWeekDates] = useState([]);
     useEffect(() => {
-        let mounted = true;
         let curr = new Date();
         let first = curr.getDate() - curr.getDay();
         let last = first + 6;
 
-        let lastday = new Date(curr.setDate(last)).toISOString().split('T')[0];
-        let firstday = new Date(curr.setDate(first)).toISOString().split('T')[0];
-        let dates = [firstday,lastday];
-        if (mounted){
-            setWeekDates(dates);
-        }
-        return () => {mounted = false};
 
+        let firstday = new Date(curr.setDate(first)).toISOString().split('T')[0];
+        let lastday = new Date(curr.setDate(last)).toISOString().split('T')[0];
+        let dates = [firstday,lastday];
+        setWeekDates(dates);
     }, [])
 
 
-    // used to get initial data for jobs
+    // set job data
+    const [jobs, setJobs] = useState();
     useEffect(() => {
-        let mounted = true;
-            if(weekDates.length !== 0){
-                socket.emit('pgInit', weekDates);
-                socket.once('initJobs', (data) => {
-                    console.log(data);
-                    if (mounted){
-                        setJobs(data);
-                    }
-                })
-            }
-        return () => {mounted = false};
+        if (weekDates.length !== 0){
+            socket.emit('pgInit', weekDates);
+        }
+        if (weekDates.length !== 0){
+            socket.once('initJobs', (data) => {
+                let InitJson = [
+                {day:"", jobs:[]},
+                {day:"", jobs:[]},
+                {day:"", jobs:[]},
+                {day:"", jobs:[]},
+                {day:"", jobs:[]},
+                {day:"", jobs:[]},
+                {day:"", jobs:[]}];
+                
+                // creates the day of the week for the array of json
+                for(let i=0; i < InitJson.length; i++){      
+                    let iterDate = new Date(weekDates[0])
+                    iterDate.setDate(iterDate.getDate() + i);
+                    InitJson[i].day = iterDate;
+                }
+                    // creates the job info from socket
+                for(let i=0; i < data.length;i++){
+                    let iter = new Date(data[i].book_date).getDay() 
+                    InitJson[iter].jobs.push(data[i]);
+                }
+                // set the information for the useState
+                setJobs(InitJson);
+                console.log(InitJson);
+                });
+        }
+            
     },[weekDates]);
 
 
+    const ShowWeeks = (props) => {
+        // map the 7 days of the week from jobs
+        const dayofweek = props.jobs.map((day,index) => {
+        return( 
+        <div className='altrItem'>
+            <div className='box' key={day.day}>
+                <h2 className='weekDate'>
+                    {day.day.toLocaleString('en-us', {weekday: 'long'}) + ' ' +
+                    day.day.toDateString().split(" ")[2] }  
+                </h2>
+                <AiIcons.AiOutlineUserAdd id={index} className='AddIcon' onClick={modalToggle}/>
+            </div>
+            <div className='numJobs'>Job Count: {day.jobs.length}</div>
+        </div>
+           )
+        });
+
+        return(
+        <div className='topLevelJob'>
+            {dayofweek}
+        </div>
+        )
+    }
+
+    //  allows you to see and edit data in old job
+    const selectedJob = (props) => {
+
+    }
+
+    //TODO:
+    // consists of the modal that creates new job
+    const [modalDisplay, setModalDisplay] = useState(false);
+
+    const modalToggle = () => setModalDisplay(!modalDisplay);
+    
+    const NewJob = (props) => {
+        // console.log(props.data)
+        return(
+            <>
+            <Modal show={modalDisplay} onHide={modalToggle} animation={false}>
+                <Modal.Header closeButton>
+                <Modal.Title>New Job</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/* 
+                    // put data inserts where you add job and client info
+                    */}
+
+
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={modalToggle}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={modalToggle}>
+                    Save Changes
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            </>
+        );
+    }
 
 
     // sets the weekDate to previous week
@@ -58,13 +131,13 @@ function Home() {
 
         const first = new Date(newfirst.setDate(newfirst.getDate()-7)).toISOString().split('T')[0];
         const last = new Date(newlast.setDate(newlast.getDate()-7)).toISOString().split('T')[0];
-
         setWeekDates([first ,last] )
     }
 
     // sets the weeks to next week
     const nextWeek = () => {
-        const [yyyy, mm, dd] = weekDates[0].split('-');
+        console.log(weekDates[0])
+        const [yyyy, mm, dd] = String(weekDates[0]).split('-');
         const newfirst = new Date(yyyy,mm-1,dd);
 
         const [year, month, date] = weekDates[1].split('-');
@@ -72,64 +145,20 @@ function Home() {
 
         const first = new Date(newfirst.setDate(newfirst.getDate()+7)).toISOString().split('T')[0];
         const last = new Date(newlast.setDate(newlast.getDate()+7)).toISOString().split('T')[0];
-
         setWeekDates([first ,last] )
     }
 
 
-    // date is the const array for days of week
-    // startDate is unknown
-    const ShowWeeks = (date) => {
-        console.log(date);
-
-        if(date.startDate){
-            // reformat this to use day of week from date and not from array
-            return(
-                <div>
-                    <h2>{date.date} {date.startDate}</h2>
-                    <div className='jobContainer'>
-                        {jobs.map((i) => {
-                            return <ShowJobs data={i} day={date.date}></ShowJobs>
-                        })}
-                    </div>
-                    <div>
-                        <AiIcons.AiOutlineUserAdd/>
-                    </div>
-                </div>)
-            
-        }
-        return(
-        <div/>)
-    }
-
-    const ShowJobs = (jobs) => {
-        if(jobs){
-            console.log(new Date(jobs.data.book_date).getDay());
-            console.log(jobs.day);
-        }
-        
-        if (jobs.data.book_date){
-            return(<div>
-                {}
-                </div>) 
-        }
-        return(<div>
-
-        </div>)
-    }
-
-    if(weekDates[0]){
+    if(weekDates[0] && jobs !== undefined){
         return (
-            <div>
-                <button onClick={prevWeek}>prev</button>
-                <button onClick={nextWeek}>next</button>
-                {week.map((i , index)=> { 
-                     const [yyyy, mm, dd] = weekDates[0].split('-');
-                     let newdate = new Date(yyyy,mm-1,dd);
-                     newdate = new Date(newdate.setDate(newdate.getDate()+index));
-                     return<ShowWeeks key={i} date={i} startDate={newdate.toISOString().split('T')[0]}/>
-                    } )}
-
+            <div className='mainData'>
+                <div className='weekButtons'>
+                    <button className='PrevButton rounded' onClick={prevWeek}>Prev</button>
+                    <button className='NextButton rounded' onClick={nextWeek}>Next</button>
+                </div>
+                <div id='dispMonth'>{new Date(weekDates[0]).toLocaleString('default', { month: 'long' })} </div>
+                <ShowWeeks jobs={jobs}/>
+                <NewJob/>
             </div>
         )        
     }
