@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const db = require("./database");
 
 require('dotenv').config();
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
