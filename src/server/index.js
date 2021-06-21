@@ -1,18 +1,18 @@
 const PORT = process.env.PORT || 5000;
 const express = require('express');
-// const cors = require('cors');
+const cors = require('cors');
 const app = express();
 const controller = require('./authController');
-// const corsOptions = {
-//     origin: '/',
-//     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-//     credentials: true
-//     }
+const corsOptions = {
+    origin: 'https://sprouts-control-center.herokuapp.com/',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true
+    }
 const cookieParser = require('cookie-parser');
 const db = require("./database");
 
 require('dotenv').config();
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
@@ -29,11 +29,11 @@ app.get('/auth/jwt', controller.check);
 
 const io = module.exports.io = require("socket.io")(server, {
     cors:{
-        origins:["/"],
+        origins:["https://sprouts-control-center.herokuapp.com/"],
     },
     handlePreflightRequest: (req,res) => {
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "/",
+            "Access-Control-Allow-Origin": "https://sprouts-control-center.herokuapp.com/",
             "Access-Control-Allow-Methods": "GET,POST",
             "Access-Control-Allow-Headers": "my-custom-header",
             "Access-Control-Allow-Credentials": true
@@ -42,7 +42,6 @@ const io = module.exports.io = require("socket.io")(server, {
     }
     
 });
-
 
 app.use(express.static(__dirname + '/../../build'));
 let connectCounter=0;
