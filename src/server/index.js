@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 const app = express();
-const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000' ]
+const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000','https://sprouts-control-center.herokuapp.com/favicon.ico' ]
 const controller = require('./authController');
 const corsOptions = {
     origin: origins,
@@ -23,7 +23,7 @@ app.use(expressCspHeader({
     directives: {
         'default-src': [origins],
         'script-src': [SELF, INLINE, origins],
-        'style-src': [SELF,INLINE, 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'],
+        'style-src': [SELF, INLINE],
         'img-src': ['data:', 'images.com'],
         'worker-src': [NONE],
         'block-all-mixed-content': true
