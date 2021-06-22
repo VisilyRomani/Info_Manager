@@ -7,7 +7,6 @@ import Home from './pages/Home';
 import Calendar from './pages/Calendar';
 import Quotes from './pages/Quotes';
 import TimeSheet from './pages/TimeSheet';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 

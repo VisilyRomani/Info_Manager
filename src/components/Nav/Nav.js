@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {NavData} from './NavData'
 import * as FaIcons from 'react-icons/fa';
 import {IconContext} from 'react-icons' 
-import {Button} from 'react-bootstrap'
 import './Nav.css'
 
 
@@ -41,7 +40,7 @@ function Nav(props) {
                 <Link to="#" className='menu-bar'>
                 <FaIcons.FaBars onClick={showSidebar}/>
                 </Link>
-                <Button onClick={Logout}>logout</Button>
+                <button className="logoutbtn" onClick={Logout}>logout</button>
             </div>
             <nav ref={closeSide} className={sidebar ? 'nav-menu active' : 'nav-menu'}>
                 <ul className='nav-menu-items' onClick={showSidebar}>
