@@ -22,10 +22,10 @@ app.use(express.json());
 app.use(expressCspHeader({
     directives: {
         'default-src': [SELF],
-        'script-src': [SELF, INLINE, 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'],
-        'style-src': [SELF, 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'],
-        'img-src': ['data:', 'images.com'],
-        'worker-src': [NONE],
+        'script-src': [SELF, INLINE, origins],
+        'style-src': [SELF,INLINE, 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'],
+        // 'img-src': ['data:', 'images.com'],
+        // 'worker-src': [NONE],
         'block-all-mixed-content': true
     }
 }));
