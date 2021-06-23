@@ -34,6 +34,7 @@ const scriptSrcUrls = [];
   const contentSecurityPolicy = [
     "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(' '),
     "style-src 'self' " + styleSrcUrls.join(' '),
+    "img-src 'self' " + styleSrcUrls.join(' '),
   ].join(';');
   
   app.use((req, res, next) => {
