@@ -10,6 +10,19 @@ const corsOptions = {
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     credentials: true
     }
+
+    const scriptSrcUrls = [];
+    const styleSrcUrls = [];
+    const contentSecurityPolicy = [
+      "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(' '),
+      "style-src 'self' " + styleSrcUrls.join(' '),
+      "img-src 'self' " + styleSrcUrls.join(' '),
+    ].join(';');
+    
+    app.use((req, res, next) => {
+      res.setHeader('Content-Security-Policy', contentSecurityPolicy);
+      next();
+    });
 const cookieParser = require('cookie-parser');
 const db = require("./database");
 require('dotenv').config();
@@ -28,19 +41,6 @@ app.use(helmet({
 //     defaultSrc:["'self'"]
 // }
 
-
-const scriptSrcUrls = [];
-  const styleSrcUrls = [];
-  const contentSecurityPolicy = [
-    "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(' '),
-    "style-src 'self' " + styleSrcUrls.join(' '),
-    "img-src 'self' " + styleSrcUrls.join(' '),
-  ].join(';');
-  
-  app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', contentSecurityPolicy);
-    next();
-  });
 
 
 
