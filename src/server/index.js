@@ -28,6 +28,21 @@ app.use(helmet({
 //     defaultSrc:["'self'"]
 // }
 
+
+const scriptSrcUrls = [];
+  const styleSrcUrls = [];
+  const contentSecurityPolicy = [
+    "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(' '),
+    "style-src 'self' " + styleSrcUrls.join(' '),
+  ].join(';');
+  
+  app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', contentSecurityPolicy);
+    next();
+  });
+
+
+
 const server = require('http').Server(app);
 
 const io = module.exports.io = require("socket.io")(server, {
