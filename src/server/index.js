@@ -30,9 +30,9 @@ require('dotenv').config();
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
-// app.use('*', (req, res, next) => {
-//     res.sendFile(path.join(__dirname, '/../../build'));
-// });
+app.use('/*', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/../../build'));
+});
 
 app.use(helmet({
     contentSecurityPolicy: false,
