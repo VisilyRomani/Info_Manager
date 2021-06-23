@@ -18,13 +18,15 @@ app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
 
-app.use(helmet.contentSecurityPolicy({
-    scriptSrc: ["'self'", "'unsafe-inline'" ],
-    imgSrc: ["'self'", "'unsafe-inline'"],
-    connectSrc:["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"],
-    defaultSrc:["'self'"]
+app.use(helmet({
+    contentSecurityPolicy: false,
 }));
-
+// {
+//     scriptSrc: ["'self'", "'unsafe-inline'" ],
+//     imgSrc: ["'self'", "'unsafe-inline'"],
+//     connectSrc:["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"],
+//     defaultSrc:["'self'"]
+// }
 
 const server = require('http').Server(app);
 
