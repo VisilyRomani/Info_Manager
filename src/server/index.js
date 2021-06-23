@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const app = express();
-app.set('port', (process.env.PORT || 5000))
 const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000','http://localhost:5000', 'https://sprouts-control-center.herokuapp.com/favicon.ico' ]
 const controller = require('./authController');
 const corsOptions = {
