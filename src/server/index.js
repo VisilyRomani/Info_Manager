@@ -23,11 +23,10 @@ app.use(express.json());
 let scriptSources, styleSources, connectSources, imgSources;
 scriptSources = ["'self'", "'unsafe-inline'"];
 styleSources = ["'self'", "'unsafe-inline'"];
-styleSources = ["'self'", "'unsafe-inline'"];
 imgSources = ["'self'"]
 connectSources = ["'self'", "ws://sprouts-control-center.herokuapp.com"]
 app.use(helmet.contentSecurityPolicy({
-    defaultSrc: ["'self"],
+    defaultSrc: ["'self'"],
     scriptSrc: scriptSources,
     styleSrc: styleSources,    
     connectSrc: connectSources,
