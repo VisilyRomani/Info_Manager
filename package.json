@@ -36,6 +36,7 @@
   "proxy": "http://localhost:5000",
   "scripts": {
     "start": "node src/server/index.js",
+    "heroku-postbuild": "npm install && npm run build",
     "dev": "concurrently 'npm run react' 'npm run server",
     "react": "react-scripts start",
     "server": "nodemon src/server/index.js",
