@@ -28,11 +28,7 @@ connectSources = ["'self'", "https://sprouts-control-center.herokuapp.com", "ws:
 app.use(helmet.contentSecurityPolicy({
     scriptSrc: scriptSources,
     imgSrc: imgSources,
-    // connectSrc:connectSources,
-    reportUri: '/report-violation',
-    reportOnly: false,
-    setAllHeaders: false,
-    safari5: false
+    connectSrc:connectSources
 }));
 
 
