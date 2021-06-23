@@ -23,6 +23,8 @@ app.use(expressCspHeader({
     directives: {
         'default-src': [NONE],
         'img-src': [SELF],
+        'style-src': [SELF],
+        'script-src': [SELF],
     }
 }));
 
