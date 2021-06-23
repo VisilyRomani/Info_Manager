@@ -1,9 +1,9 @@
 const PORT = process.env.PORT || 5000;
 const express = require('express');
 const cors = require('cors');
-const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
+const helmet = require('helmet');
 const app = express();
-const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000','https://sprouts-control-center.herokuapp.com/favicon.ico' ]
+const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000','http://localhost:5000', 'https://sprouts-control-center.herokuapp.com/favicon.ico' ]
 const controller = require('./authController');
 const corsOptions = {
     origin: origins,
@@ -19,14 +19,21 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
-app.use(expressCspHeader({
-    directives: {
-        'default-src': [NONE],
-        'img-src': [SELF],
-        'style-src': [SELF],
-        'script-src': [SELF, INLINE, 'https://sprouts-control-center.herokuapp.com' ],
-    }
+let scriptSources, styleSources, connectSources;
+scriptSources = ["'self'", "'unsafe-inline'"];
+styleSources = ["'self'", "'unsafe-inline'"];
+connectSources = ["'self'", "ws://sprouts-control-center.herokuapp.com"]
+app.use(helmet.contentSecurityPolicy({
+    defaultSrc: ["'self"],
+    scriptSrc: scriptSources,
+    styleSrc: styleSources,    
+    connectSrc: connectSources,
+    reportUri: '/report-violation',
+    reportOnly: false,
+    setAllHeaders: false,
+    safari5: false
 }));
+
 
 const server = require('http').Server(app);
 
