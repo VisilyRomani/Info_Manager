@@ -18,15 +18,10 @@ app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
 
-let scriptSources, styleSources, connectSources, imgSources;
-scriptSources = ["'self'", "'unsafe-inline'" ];
-styleSources = ["'self'", "'unsafe-inline'"];
-imgSources = ["'self'"]
-connectSources = ["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"]
 app.use(helmet.contentSecurityPolicy({
-    scriptSrc: scriptSources,
-    imgSrc: imgSources,
-    connectSrc:connectSources
+    scriptSrc: ["'self'", "'unsafe-inline'" ],
+    imgSrc: ["'self'", "'unsafe-inline'"],
+    connectSrc:["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"]
 }));
 
 
