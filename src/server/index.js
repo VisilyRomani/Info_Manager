@@ -1,5 +1,6 @@
 const PORT = process.env.PORT || 5000;
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const app = express();
@@ -30,6 +31,10 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
+app.use('*', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '/../../build'));
+});
+console.log(__dirname + '/../../build')
 
 app.use(helmet({
     contentSecurityPolicy: false,
@@ -61,7 +66,6 @@ const io = module.exports.io = require("socket.io")(server, {
     
 });
 
-app.use(express.static(__dirname + '/../../build'));
 
 
 app.post('/auth/login', controller.signin);

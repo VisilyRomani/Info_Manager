@@ -1,0 +1,1 @@
+node public/index.bundle.js
