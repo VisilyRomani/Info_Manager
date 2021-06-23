@@ -62,7 +62,7 @@ function Home() {
         <div className='altrItem'>
             <div className='box' key={day.day}>
                 <h2 className='weekDate'>
-                    {day.day.format('dddd') +" "+ day.day.date()}
+                    { day.day.format('MMMM') + " " +day.day.format('dddd') +" "+ day.day.date()}
                 </h2>
                 <AiIcons.AiOutlineUserAdd id={index} className='AddIcon' onClick={modalToggle}/>
             </div>
@@ -119,7 +119,7 @@ function Home() {
                     <button className='PrevButton rounded' onClick={prevWeek}>Prev</button>
                     <button className='NextButton rounded' onClick={nextWeek}>Next</button>
                 </div>
-                <div id='dispMonth'>{new Date(weekDates[0]).toLocaleString('default', { month: 'long' })} </div>
+                {/* <div id='dispMonth'>{new Date(weekDates[0]).toLocaleString('default', { month: 'long' })} </div> */}
                 <ShowWeeks jobs={jobs}/>
                 <NewJob/>
             </div>
