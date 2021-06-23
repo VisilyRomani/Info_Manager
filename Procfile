@@ -1,1 +1,1 @@
-node public/index.bundle.js
+node src/server/index.js

@@ -29,7 +29,6 @@ const db = require("./database");
 require('dotenv').config();
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(express.urlencoded());
 app.use(express.json());
 app.use('*', (req, res, next) => {
     res.sendFile(path.join(__dirname, '/../../build'));
