@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
 let scriptSources, styleSources, connectSources, imgSources;
-scriptSources = ["'self'" ];
+scriptSources = ["'self'","https://sprouts-control-center.herokuapp.com" ];
 styleSources = ["'self'", "'unsafe-inline'"];
 imgSources = ["'self'"]
 connectSources = ["'self'", "ws://sprouts-control-center.herokuapp.com"]
