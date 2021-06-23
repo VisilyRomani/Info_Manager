@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/auth';
 
 function login(username, password) {
-    return axios.post(API_URL + '/login', {username, password},{ withCredentials: true });
+    return axios.post('/auth/login', {username, password},{ withCredentials: true });
 }
 
 // const register = () => {
@@ -14,7 +13,7 @@ function login(username, password) {
 // }
 
 function checkLogin(){
-    return axios.get(API_URL + "/jwt",{ withCredentials: true })
+    return axios.get("/auth/jwt",{ withCredentials: true })
     .then((response) => {
         return response.data});
 }
