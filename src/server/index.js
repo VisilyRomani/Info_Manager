@@ -20,7 +20,7 @@ const corsOptions = {
     ].join(';');
     
     app.use((req, res, next) => {
-      res.setHeader('Content-Security-Policy', contentSecurityPolicy);
+      res.writeHead('Content-Security-Policy', contentSecurityPolicy);
       next();
     });
 const cookieParser = require('cookie-parser');
