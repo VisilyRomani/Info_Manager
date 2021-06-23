@@ -24,7 +24,7 @@ app.use(expressCspHeader({
         'default-src': [NONE],
         'img-src': [SELF],
         'style-src': [SELF],
-        'script-src': [SELF],
+        'script-src': [SELF, INLINE, 'https://sprouts-control-center.herokuapp.com' ],
     }
 }));
 
