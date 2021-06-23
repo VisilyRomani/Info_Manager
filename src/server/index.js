@@ -19,16 +19,16 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
-app.use(expressCspHeader({
-    directives: {
-        'default-src': [origins],
-        'script-src': [SELF, INLINE, origins],
-        'style-src': [SELF, INLINE],
-        'img-src': ['data:', 'images.com'],
-        'worker-src': [NONE],
-        'block-all-mixed-content': true
-    }
-}));
+// app.use(expressCspHeader({
+//     directives: {
+//         'default-src': [origins],
+//         'script-src': [SELF, INLINE, origins],
+//         'style-src': [SELF, INLINE],
+//         'img-src': ['data:', 'images.com'],
+//         'worker-src': [NONE],
+//         'block-all-mixed-content': true
+//     }
+// }));
 
 const server = require('http').Server(app);
 
