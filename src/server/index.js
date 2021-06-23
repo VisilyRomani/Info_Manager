@@ -21,7 +21,8 @@ app.use(express.json());
 app.use(helmet.contentSecurityPolicy({
     scriptSrc: ["'self'", "'unsafe-inline'" ],
     imgSrc: ["'self'", "'unsafe-inline'"],
-    connectSrc:["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"]
+    connectSrc:["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"],
+    defaultSrc:["'self'"]
 }));
 
 
