@@ -24,7 +24,7 @@ let scriptSources, styleSources, connectSources, imgSources;
 scriptSources = ["'self'" ];
 styleSources = ["'self'", "'unsafe-inline'"];
 imgSources = ["'self'"]
-connectSources = ["'self'", "https://sprouts-control-center.herokuapp.com"]
+connectSources = ["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"]
 app.use(helmet.contentSecurityPolicy({
     scriptSrc: scriptSources,
     imgSrc: imgSources,
