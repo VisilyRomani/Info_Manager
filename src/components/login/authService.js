@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-function login(username, password) {
+
+async function checkLogin() {
+    const response = await axios.get('/auth/jwt', { withCredentials: true });
+    return response.data;
+}
+
+
+async function login(username, password) {
     return axios.post( '/auth/login', {username, password},{ withCredentials: true });
 }
 
@@ -11,11 +18,7 @@ function login(username, password) {
 //     });
 // }
 
-function checkLogin(){
-    return axios.get('/auth/jwt',{ withCredentials: true })
-    .then((response) => {
-        return response.data});
-}
+
 
 const authService = {
     login, checkLogin

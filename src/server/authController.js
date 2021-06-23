@@ -10,7 +10,6 @@ exports.reg = (req,res) => {
 }
 
 exports.check = (req,res) => {
-    // console.log(req.cookies)
     try { 
         let JWTverify = jwt.verify(req.cookies.token,process.env.JWTSECRET)
         if(JWTverify){

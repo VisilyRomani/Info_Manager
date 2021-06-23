@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
   
     // Express serve up index.html file if it doesn't recognize route
     app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+      res.sendFile(path.resolve(__dirname,'../../', 'build', 'index.html'));
     });
   }
 
@@ -65,12 +65,12 @@ const io = module.exports.io = require("socket.io")(server, {
 });
 
 
+app.get('/auth/jwt', controller.check);
 
 app.post('/auth/login', controller.signin);
 
 // app.post('/auth/register', controller.reg);
 
-app.get('/auth/jwt', controller.check);
 
 
 
