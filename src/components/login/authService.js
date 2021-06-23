@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-
 function login(username, password) {
-    return axios.post('/auth/login', {username, password},{ withCredentials: true });
+    return axios.post( '/auth/login', {username, password},{ withCredentials: true });
 }
 
 // const register = () => {
@@ -13,7 +12,7 @@ function login(username, password) {
 // }
 
 function checkLogin(){
-    return axios.get("/auth/jwt",{ withCredentials: true })
+    return axios.get('/auth/jwt',{ withCredentials: true })
     .then((response) => {
         return response.data});
 }
