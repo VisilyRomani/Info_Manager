@@ -19,7 +19,7 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 let scriptSources, styleSources, connectSources, imgSources;
-scriptSources = ["'self'" ];
+scriptSources = ["'self'", "'unsafe-inline'" ];
 styleSources = ["'self'", "'unsafe-inline'"];
 imgSources = ["'self'"]
 connectSources = ["'self'", "https://sprouts-control-center.herokuapp.com", "ws://sprouts-control-center.herokuapp.com"]
@@ -42,7 +42,6 @@ const io = module.exports.io = require("socket.io")(server, {
             "Access-Control-Allow-Methods": "GET,POST",
             "Access-Control-Allow-Headers": "my-custom-header",
             "Access-Control-Allow-Credentials": true
-
         });
     }
     
