@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const app = express();
-const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000','http://localhost:5000', 'https://sprouts-control-center.herokuapp.com/favicon.ico' ]
+const origins = ['https://sprouts-control-center.herokuapp.com','http://localhost:3000','http://localhost:5000']
 const controller = require('./authController');
 const corsOptions = {
     origin: origins,
@@ -12,13 +12,12 @@ const corsOptions = {
     }
 const cookieParser = require('cookie-parser');
 const db = require("./database");
-
-
 require('dotenv').config();
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.json());
+
 let scriptSources, styleSources, connectSources, imgSources;
 scriptSources = ["'self'" ];
 styleSources = ["'self'", "'unsafe-inline'"];
@@ -32,14 +31,6 @@ app.use(helmet.contentSecurityPolicy({
 
 
 const server = require('http').Server(app);
-
-app.post('/auth/login', controller.signin);
-
-// app.post('/auth/register', controller.reg);
-
-app.get('/auth/jwt', controller.check);
-
-
 
 const io = module.exports.io = require("socket.io")(server, {
     cors:{
@@ -58,6 +49,17 @@ const io = module.exports.io = require("socket.io")(server, {
 });
 
 app.use(express.static(__dirname + '/../../build'));
+
+
+app.post('/auth/login', controller.signin);
+
+// app.post('/auth/register', controller.reg);
+
+app.get('/auth/jwt', controller.check);
+
+
+
+
 let connectCounter=0;
 io.on('connection', socket => {
     console.log(connectCounter)
