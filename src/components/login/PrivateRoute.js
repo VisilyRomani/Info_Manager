@@ -1,6 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import authService from './authService'
+import Nav from '../Nav/Nav';
+
+const NavRoute = ({exact, path, component: Component}) => (
+  <Route exact={exact} path={path} render={(props) => (
+    <div>
+      <Nav />
+      <Component {...props}/>
+    </div>
+  )}/>
+);
+
 
 const PrivateRoute = (props) => {
     const [IsLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,7 +37,7 @@ const PrivateRoute = (props) => {
           {...rest}
           render={() =>
             IsLoggedIn ? (
-                <Component {...props} />
+              <NavRoute exactly component={()=>(<Component{...props}/>)}/>
             ) : loading ? (
                 <h1>loading</h1>
             ) : (

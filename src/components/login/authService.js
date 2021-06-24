@@ -7,8 +7,8 @@ async function checkLogin() {
 }
 
 
-async function login(username, password) {
-    return axios.post( '/auth/login', {username, password},{ withCredentials: true });
+function login(username, password) {
+    return axios.post('/auth/login', {username, password},{ withCredentials: true });
 }
 
 // const register = () => {

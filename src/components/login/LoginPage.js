@@ -4,26 +4,10 @@ import Logo from "../../asset/Sprouts-Logo-Front-BG.jpg";
 import './LoginPage.css'
 
 const LoginPage = (props) => {
-    // TODO: Change this to a json and use only one useState
-    // const [username, setUsername] = useState('');
-    // const [password, setPassword] = useState('');
     const [input, setInput] = useState({username:'', password:''});
     const {username, password} = input
     const [message, setMessage] = useState('');
     const[show, setShow] = useState(false);
-
-
-    // const onChangeUsername = (e) => {
-    //     if(e.target.value===''){
-    //     }
-    //     setUsername(e.target.value);
-    // };
-
-    // const onChangePassword = (e) => {
-    //     if(e.target.value===''){
-    //     }
-    //     setPassword(e.target.value);
-    // }
 
     const onChangeInput = (e) => {
         const {name, value} = e.target;
@@ -40,7 +24,6 @@ const LoginPage = (props) => {
         }
     }
 
-    // TODO: This needs to be changed because of the refacotred login
     const handleLogin = (e) =>{
         e.preventDefault();
         setMessage('');
