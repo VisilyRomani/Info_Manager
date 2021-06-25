@@ -31,7 +31,7 @@ const LoginPage = (props) => {
             setMessage(' - This field is required.')
             setShow(true);
         }else{
-             authService.login(username, password).then( ()=> {
+             authService.login(username, password).then( (data)=> {
                 props.history.push('/home');
             },
                 (error) => {

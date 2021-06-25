@@ -10,12 +10,13 @@ exports.reg = (req,res) => {
 }
 
 exports.check = (req,res) => {
+    console.log('actually hit the route jwt check');
     try { 
         let JWTverify = jwt.verify(req.cookies.token,process.env.JWTSECRET)
         if(JWTverify){
-            res.send(true);
+            res.status(200).send(true);
         }else{
-            res.send(false);
+            res.status(404).send(false);
         }
     } catch(err){
         res.send(false);
@@ -23,6 +24,7 @@ exports.check = (req,res) => {
 }
 
 exports.signin = (req, res) => {
+    console.log('actually hit the route- sign in');
     db.query("SELECT * FROM users WHERE username = '" + req.body.username +"'")
     .then(data => {
         if(!data){
@@ -33,14 +35,14 @@ exports.signin = (req, res) => {
             return res.status(401).send({
                 accessToken: null,
                 message: ' - Login or password is invalid.'})
+        }else{
+            let token = jwt.sign({id:data.user_id}, process.env.JWTSECRET, {
+                expiresIn:900
+            });
+            res.cookie('token', token);
+            res.json({token});
+            res.send(true);
         }
-
-        let token = jwt.sign({id:data.user_id}, process.env.JWTSECRET, {
-            expiresIn:900,
-            
-        });
-        res.cookie('token', token);
-        res.json({token});
     }).catch(err => {
         res.status(500).send({message: err.message});
     })

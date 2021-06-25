@@ -1,5 +1,4 @@
 import React from 'react';
-import Nav from './components/Nav/Nav';
 import {HashRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import LoginPage from './components/login/LoginPage';
 import PrivateRoute from './components/login/PrivateRoute';
