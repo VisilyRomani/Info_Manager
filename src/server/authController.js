@@ -25,6 +25,8 @@ exports.check = (req,res) => {
 
 exports.signin = (req, res) => {
     console.log('actually hit the route- sign in');
+    console.log(req.body.username + " user")
+    console.log(req.body.password + " pass")
     db.query("SELECT * FROM users WHERE username = '" + req.body.username +"'")
     .then(data => {
         if(!data){
