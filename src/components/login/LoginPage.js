@@ -56,21 +56,19 @@ const LoginPage = (props) => {
     return (
         <div>
             <div className='bg'/>
-                <div className='LoginItems'>
-                </div>
-                <form onSubmit={handleLogin} className='loginForm formFlex p-3 mb-5 rounded'>
+                <form onSubmit={handleLogin} className='loginForm formFlex '>
                     <img className='logo' src={Logo} alt=''></img>
                     
                     <label htmlFor='username' >Username :</label><br/>
                     <DismissableAlert/>
-                    <input type="text" id="username" name="username" className='loginInput' onChange={onChangeInput}></input>
+                    <input type="text" id="username" name="username" className='loginInput ' onChange={onChangeInput}></input>
 
-                    <label htmlFor="password">Last name:</label><br/>
+                    <label htmlFor="password">Password:</label><br/>
                     <DismissableAlert/>
 
-                    <input type="password" id="password" name="password" className='loginInput'onChange={onChangeInput}></input>
+                    <input type="password" id="password" name="password" className='loginInput 'onChange={onChangeInput}></input>
 
-                    <input type="submit" value="Submit" className='submitForm'/>
+                    <input type="submit" value="Submit" className='submitForm '/>
                     {/* <button variant='primary' type='submit' onClick={handleLogin}>Submit</button> */}
                 </form>
         </div>
