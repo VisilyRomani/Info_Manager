@@ -116,10 +116,9 @@ function Home() {
         return (
             <div className='mainData'>
                 <div className='weekButtons'>
-                    <button className='PrevButton rounded' onClick={prevWeek}>Prev</button>
-                    <button className='NextButton rounded' onClick={nextWeek}>Next</button>
+                    <button className='transButton' onClick={prevWeek}>Prev</button>
+                    <button className='transButton' onClick={nextWeek}>Next</button>
                 </div>
-                {/* <div id='dispMonth'>{new Date(weekDates[0]).toLocaleString('default', { month: 'long' })} </div> */}
                 <ShowWeeks jobs={jobs}/>
                 <NewJob/>
             </div>
