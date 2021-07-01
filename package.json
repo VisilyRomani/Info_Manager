@@ -36,7 +36,6 @@
     "web-vitals": "^1.1.2"
   },
   "proxy": "http://localhost:5000",
-  "homepage": "/home",
   "scripts": {
     "start": "node src/server/index.js",
     "heroku-postbuild": "npm install && npm install --only=dev --no-shrinkwrap && npm run build",
