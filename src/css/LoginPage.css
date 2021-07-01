@@ -4,7 +4,7 @@ body, html {
 }
   
   .bg {
-    background-image: url("../../asset/background2.jpg");
+    background-image: url("../asset/background2.jpg");
     height: 100vh; 
     display: block;
 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import authService from './authService';
 import Logo from "../../asset/Sprouts-Logo-Front-BG.jpg";
-import './LoginPage.css'
+import '../../css/LoginPage.css'
 
 const LoginPage = (props) => {
     const [input, setInput] = useState({username:'', password:''});

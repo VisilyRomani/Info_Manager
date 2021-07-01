@@ -2,8 +2,8 @@ import React, {useState, useRef, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {NavData} from './NavData'
 import * as FaIcons from 'react-icons/fa';
-import {IconContext} from 'react-icons' 
-import './Nav.css'
+import {IconContext} from 'react-icons';
+import '../../css/Nav.css';
 
 
 

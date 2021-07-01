@@ -1,7 +1,7 @@
 import React from 'react';
 import reactDom from 'react-dom';
 import { Button } from './Button';
-import './Modal.css';
+import '../../css/Modal.css';
 
 // RRRREFACTORRR
 export const Modal = ({visible, toggle}) => visible ? reactDom.createPortal(

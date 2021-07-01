@@ -10,7 +10,7 @@ const origins = ['https://sprouts-control-center.herokuapp.com','http://localhos
 const controller = require('./authController');
 const corsOptions = {
     origin: origins,
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    optionsSuccessStatus: 200, 
     credentials: true
     }
 const scriptSrcUrls = [];

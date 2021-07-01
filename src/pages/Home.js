@@ -2,9 +2,9 @@ import React, {useState, useEffect, useReducer} from 'react';
 // import * as AiIcons from 'react-icons/ai';
 import moment from 'moment'; 
 import {socket} from '../socket';
-import { Button } from '../components/reusable/Button';
+import Button from '../components/reusable/Button';
 import Modal from '../components/reusable/Modal';
-import './home.css';
+import '../css/Home.css';
 
 //TODO:
     // get data from here into the modal
