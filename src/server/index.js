@@ -38,6 +38,7 @@ app.get('/auth/jwt', controller.check);
 app.post('/auth/login', controller.signin);
 
 // app.post('/auth/register', controller.reg);
+
 if (process.env.NODE_ENV === 'production') {
     // Exprees will serve up production assets
     app.use(express.static(path.join(__dirname, '../../build')));
@@ -69,10 +70,9 @@ let connectCounter=0;
 io.on('connection', socket => {
     console.log(connectCounter)
     connectCounter++; 
-    
+    let SelectJob = 'SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2';
     socket.on('pgInit', (dates) => {
-
-        db.any('SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2', dates).then((data)=> {
+        db.any(SelectJob, dates).then((data)=> {
             socket.emit('initJobs', data);
             console.log(data);
         });
@@ -83,7 +83,9 @@ io.on('connection', socket => {
         connectCounter--;
      });
 });
+ 
 
-// server.listen(PORT, ()=>{
-    console.log(`connected on ` + PORT);
-// });
+// shows unhandled rejections when they appear
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  });

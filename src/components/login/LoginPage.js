@@ -69,7 +69,6 @@ const LoginPage = (props) => {
                     <input type="password" id="password" name="password" className='loginInput 'onChange={onChangeInput}></input>
 
                     <input type="submit" value="Submit" className='submitForm '/>
-                    {/* <button variant='primary' type='submit' onClick={handleLogin}>Submit</button> */}
                 </form>
         </div>
     )

@@ -10,7 +10,6 @@ exports.reg = (req,res) => {
 }
 
 exports.check = (req,res) => {
-    console.log('actually hit the route jwt check');
     try { 
         let JWTverify = jwt.verify(req.cookies.token,process.env.JWTSECRET)
         if(JWTverify){
@@ -24,16 +23,13 @@ exports.check = (req,res) => {
 }
 
 exports.signin = (req, res) => {
-    console.log('actually hit the route- sign in');
-    console.log(req.body.username + " user")
-    console.log(req.body.password + " pass")
-    db.query("SELECT * FROM users WHERE username = '" + req.body.username +"'")
+    let {username, password} = req.body;
+    db.query("SELECT * FROM users WHERE username = '" + username +"'")
     .then(data => {
         if(!data){
             res.status(404).send({message:'user not found'});
         }
-        console.log(data[0].password + ": database hash");
-        let validPass = bcrypt.compareSync(req.body.password, data[0].password);
+        let validPass = bcrypt.compareSync(password, data[0].password);
         if(!validPass){
             return res.status(401).send({
                 accessToken: null,
@@ -44,7 +40,6 @@ exports.signin = (req, res) => {
             });
             res.cookie('token', token);
             res.json({token});
-            res.send(true);
         }
     }).catch(err => {
         res.status(500).send({message: err.message});

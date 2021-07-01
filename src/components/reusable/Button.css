@@ -1,0 +1,15 @@
+.transButton {
+    background-color: transparent;
+    border: 2px solid rgb(119, 119, 119);
+    color: rgb(119, 119, 119);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 2;
+    margin: 1.5px;
+    width: 10vh;
+}
+.transButton:hover{
+    color: rgb(90, 90, 90);
+    border: 2px solid rgb(90, 90, 90);
+
+}
