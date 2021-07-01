@@ -41,7 +41,7 @@ const PrivateRoute = (props) => {
             ) : loading ? (
                 <h1>loading</h1>
             ) : (
-              <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+              <Redirect to={{ pathname: '/', state: { from: props.location } }} />
             )
             
           }

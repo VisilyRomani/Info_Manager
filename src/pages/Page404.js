@@ -6,7 +6,7 @@ import '../css/Page404.css'
 function TimeSheet() {
     let history = useHistory();
     const redir = () => {
-        history.push('/login')
+        history.push('/')
     }
 
     return (
