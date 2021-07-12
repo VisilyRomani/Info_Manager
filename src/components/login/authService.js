@@ -1,14 +1,16 @@
-import axios from 'axios';
-
+import axios from "axios";
 
 async function checkLogin() {
-    const response = await axios.get('/auth/jwt', { withCredentials: true });
-    return response.data;
+  const response = await axios.get("/auth/jwt", { withCredentials: true });
+  return response.data;
 }
 
-
 function login(username, password) {
-    return axios.post('/auth/login', {username, password},{ withCredentials: true });
+  return axios.post(
+    "/auth/login",
+    { username, password },
+    { withCredentials: true }
+  );
 }
 
 // const register = () => {
@@ -18,9 +20,8 @@ function login(username, password) {
 //     });
 // }
 
-
-
 const authService = {
-    login, checkLogin
-}
+  login,
+  checkLogin,
+};
 export default authService;

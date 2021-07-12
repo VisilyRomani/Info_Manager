@@ -1,14 +1,16 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;    
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.home,.calender,.clients,.jobs {
-    display: flex;
-    height: 90vh;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;   
+.home,
+.calender,
+.clients,
+.jobs {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
 }
-

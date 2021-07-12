@@ -1,15 +1,16 @@
-
-.weekButtons{
-    display: flex;
-    justify-content: space-between;
-    
+body {
+  font-family: "Open Sans", sans-serif;
+}
+.weekButtons {
+  display: flex;
+  justify-content: space-between;
 }
 
-#dispMonth{
-    font-size: 50px;
-    font-family: 'Open Sans', sans-serif;
-    text-align: center;
-    padding-bottom: 10px;
+#dispMonth {
+  font-size: 50px;
+  /* font-family: 'Open Sans', sans-serif; */
+  text-align: center;
+  padding-bottom: 10px;
 }
 
 /* 
@@ -19,54 +20,55 @@ Days of week in the home page
 
 ####################
 */
-.mainData{
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 80px);
+.mainData {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px);
 }
 
-.topLevelJob{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow-y: auto;
-    height: 100%;
-    font-family: 'Open Sans', sans-serif;
-    background-color: white;
+.topLevelJob {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  height: 100%;
+  /* font-family: 'Open Sans', sans-serif; */
+  background-color: white;
 }
 
 /* .topLevelJob */
-.box{
-    display: flex;
-    border-top: rgba(128, 128, 128, 0.288) 1px solid;
-    height: 100%;
+.box {
+  display: flex;
+  border-top: rgba(128, 128, 128, 0.288) 1px solid;
+  height: 100%;
 }
 
-.altrItem{
-    background-color: white;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+.altrItem {
+  background-color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .altrItem:nth-child(odd) {
-    background-color: rgba(202, 202, 202, 0.205);}
-
-.weekDate{
-    padding: 10px;
-    width: 100vw;
-    margin-bottom: 0;
+  background-color: rgba(202, 202, 202, 0.205);
 }
-.numJobs{
-    padding-left: 5vw;
-    padding-bottom: 20px;
+
+.weekDate {
+  padding: 10px;
+  width: 100vw;
+  margin-bottom: 0;
+}
+.numJobs {
+  padding-left: 5vw;
+  padding-bottom: 20px;
 }
 
 /* new job button */
- #newJobButton{
-    bottom: 0;
-    position: sticky;
-    width: 100vw;
-    background-color: white;
-    height: 50px;
-    margin:0
+#newJobButton {
+  bottom: 0;
+  position: sticky;
+  width: 100vw;
+  background-color: white;
+  height: 50px;
+  margin: 0;
 }
