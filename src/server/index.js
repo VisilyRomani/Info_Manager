@@ -48,14 +48,16 @@ app.get("/clients", (req, res) => {
 });
 
 app.post("/submitJob", (req, res) => {
-  let submitClient = "";
-  let submitJob = "";
-  db.one(submitDB).then((data) => {
-    db.none(submitJob).then((data) => {
-      res.send(200);
-    });
+  let { client_id, description, quote, date } = req.body;
+  let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote) VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
+  console.log(submitJob);
+  db.none(submitJob, { client_id, description, quote, date }).then((err) => {
+    console.log(err);
+    // res.send(200);
+    // TODO: create Socket emit to update the page jobs
   });
 });
+
 // app.post('/auth/register', controller.reg);
 
 if (process.env.NODE_ENV === "production") {
@@ -87,8 +89,7 @@ let connectCounter = 0;
 io.on("connection", (socket) => {
   console.log(connectCounter);
   connectCounter++;
-  let SelectJob =
-    "SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2";
+  let SelectJob = `SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2`;
   socket.on("pgInit", (dates) => {
     db.any(SelectJob, dates).then((data) => {
       socket.emit("initJobs", data);

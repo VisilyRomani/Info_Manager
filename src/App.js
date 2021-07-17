@@ -7,6 +7,7 @@ import Calendar from "./pages/Calendar";
 import Quotes from "./pages/Quotes";
 import TimeSheet from "./pages/TimeSheet";
 import Page404 from "./pages/Page404";
+import Client from "./pages/Client";
 import "./App.css";
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
           <PrivateRoute exact path="/calendar" component={Calendar} />
           <PrivateRoute exact path="/quotes" component={Quotes} />
           <PrivateRoute exact path="/timesheet" component={TimeSheet} />
+          <PrivateRoute exact path="/clients" component={Client} />
+
           <Route component={Page404} />
         </Switch>
       </Router>

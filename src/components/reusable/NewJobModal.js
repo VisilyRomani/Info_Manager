@@ -4,9 +4,9 @@ import { Button } from "./Button";
 import "../../css/Modal.css";
 import axios from "axios";
 import DatePicker from "react-datepicker";
-import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
-import StateManager from "react-select";
+import moment from "moment";
 
 // RRRREFACTORRR
 export const Modal = ({ visible, toggle, date, jobs }) => {
@@ -15,23 +15,20 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
   const [formState, setFormState] = useState({
     label: false,
     description: false,
-    clientAddress: false,
   });
   const [formData, setformData] = useState({
     label: "",
-    clientNumber: "",
-    clientAddress: "",
-    sprinklerStatus: "None",
-    email: "",
+    client_id: 0,
     description: "",
     quote: "",
-    date: new Date(),
+    date: moment(),
   });
 
   useEffect(() => {
     axios.get("/clients", { withCredentials: true }).then((data) => {
       data.data.forEach((element) => {
         element["label"] = element["client_name"];
+        element["value"] = element["client_name"];
         delete element["client_name"];
       });
       setClients(data.data);
@@ -44,27 +41,22 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
     // TODO: Create a check that client name,
     // address, and description is filled out
 
-    // if (formData.label === "") {
-    //   setFormState({ ...formState, label: true });
-    // }
-    // if (formData.descripiton === "") {
-    //   setFormState({ ...formState, description: true });
-    // }
-    // if (formData.clientAddress === "") {
-    //   setFormState({ ...formState, clientAddress: true });
-    // }
-    // if (
-    //   formData.label !== "" &&
-    //   formData.description !== "" &&
-    //   formData.clientAddress !== ""
-    // ) {
-    //   axios.post("/submitJob", formData).then((res) => {
-    //     // if successfull close window
-    //     // else show error message
-    //   });
-    // } else {
-    //   alert("make sure to submit label, description and client address");
-    // }
+    if (formData.label === "") {
+      setFormState({ ...formState, label: true });
+    }
+    if (formData.descripiton === "") {
+      setFormState({ ...formState, description: true });
+    }
+    if (formData.label !== "" && formData.description !== "") {
+      console.log(formData);
+      axios.post("/submitJob", formData).then((res) => {
+        // if successfull close window
+        // else show error message
+        console.log(res);
+      });
+    } else {
+      alert("make sure to submit label, description and client address");
+    }
   };
 
   const CloseJob = (e) => {
@@ -84,19 +76,14 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
 
   const handleSelect = (valueSelected) => {
     console.log(valueSelected);
-    if (valueSelected.__isNew__ === true) {
-      setformData({ ...formData, label: valueSelected.label });
-    } else {
-      setformData({
-        ...formData,
-        label: valueSelected.label,
-        clientNumber: valueSelected.phone_num,
-        clientAddress: valueSelected.addr,
-        email: valueSelected.email,
-        sprinklerStatus: valueSelected.sprinklers,
-      });
-    }
+    setformData({
+      ...formData,
+      label: valueSelected.label,
+      client_id: valueSelected.client_id,
+    });
   };
+  // TODO: change the select back to normal
+  //    select the client id and send it back to the server
 
   if (date === "") {
     return visible
@@ -105,14 +92,15 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
             <div className="modal-pop" role="dialog" aria-modal="true">
               <h2 className="modalTitle">Create New Job</h2>
               <form onSubmit={SubmitJob} className="newJobForm">
-                <label>Client Name</label>
-                <CreatableSelect
+                <label>Client</label>
+                <Select
                   options={clients}
                   onChange={handleSelect}
                   className="modalInputs"
-                ></CreatableSelect>
+                  value={formData}
+                />
 
-                <label>Phone Number</label>
+                {/* <label>Phone Number</label>
                 <input
                   className="modalInputs"
                   value={formData.clientNumber}
@@ -164,7 +152,7 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
                   <option value="front">Front</option>
                   <option value="back">Back</option>
                   <option value="both">Both</option>
-                </select>
+                </select> */}
 
                 <label>Description</label>
                 <textarea
@@ -190,8 +178,13 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
                 <label>Date</label>
                 <DatePicker
                   className="modalInputs"
-                  selected={formData.date || new Date()}
-                  onChange={(date) => setformData({ ...formData, date: date })}
+                  selected={new Date(formData.date) || new Date()}
+                  onChange={(date) => {
+                    setformData({
+                      ...formData,
+                      date: moment(new Date(date)),
+                    });
+                  }}
                 />
               </form>
               <div className="modalButtonContainer">

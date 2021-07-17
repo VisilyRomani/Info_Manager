@@ -33,6 +33,7 @@
     "socket.io": "^4.1.1",
     "socket.io-client": "^4.1.1",
     "socketio-jwt": "^4.6.2",
+    "sql-template-strings": "^2.2.2",
     "uuid": "^8.3.2",
     "validator": "^13.6.0",
     "web-vitals": "^1.1.2"
