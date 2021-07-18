@@ -27,6 +27,7 @@ exports.check = (req, res) => {
 
 exports.signin = (req, res) => {
   let { username, password } = req.body;
+
   db.query("SELECT * FROM users WHERE username = '" + username + "'")
     .then((data) => {
       if (!data) {

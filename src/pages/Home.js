@@ -29,15 +29,18 @@ function Home() {
 
   // use to set initial state for days of week
   useEffect(() => {
-    let cur = moment();
-    let firstday = cur.clone().weekday(0);
-    let lastday = cur.clone().weekday(6);
+    let init = moment();
+    let result = moment(init).utc().add(init.utcOffset(), 'm');
+    let firstday = result.clone().weekday(0);
+    let lastday = result.clone().weekday(6);
 
     let dates = [firstday, lastday];
+    console.log(dates)
     setWeekDates(dates);
   }, []);
 
   // Goes through and sets initial data for the jobs state
+  // TODO: refactor this to use ... like in the modal
   useEffect(() => {
     if (weekDates.length !== 0) {
       socket.emit("pgInit", weekDates);
@@ -61,9 +64,13 @@ function Home() {
         }
         // creates the job info from socket
         for (let i = 0; i < data.length; i++) {
+          // let iter = moment(
+          //   new Date(data[i].book_date).toISOString().split("T")[0]
+          // ); 
           let iter = moment(
-            new Date(data[i].book_date).toISOString().split("T")[0]
-          );
+            data[i].book_date
+          ).utc();
+          console.log(iter)
           InitJson[iter.day()].jobs.push(data[i]);
         }
         // set the information for the useState

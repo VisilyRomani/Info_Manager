@@ -8,22 +8,24 @@ import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 
-// RRRREFACTORRR
 export const Modal = ({ visible, toggle, date, jobs }) => {
-  // const [startDate, setStartDate] = useState(new Date());
+  // Store state for all clients 
   const [clients, setClients] = useState([]);
+  // Store state for the form error checking
   const [formState, setFormState] = useState({
     label: false,
     description: false,
   });
+  // store state for form data
   const [formData, setformData] = useState({
     label: "",
     client_id: 0,
     description: "",
     quote: "",
-    date: moment(),
+    date: moment().utc(),
   });
 
+  // Gets all clients and stores in the state
   useEffect(() => {
     axios.get("/clients", { withCredentials: true }).then((data) => {
       data.data.forEach((element) => {
@@ -35,11 +37,9 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
     });
   }, []);
 
+  // send info to server
   const SubmitJob = (e) => {
     e.preventDefault();
-    console.log(formData);
-    // TODO: Create a check that client name,
-    // address, and description is filled out
 
     if (formData.label === "") {
       setFormState({ ...formState, label: true });
@@ -49,16 +49,15 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
     }
     if (formData.label !== "" && formData.description !== "") {
       console.log(formData);
+      // TODO: change this into socket connection
       axios.post("/submitJob", formData).then((res) => {
-        // if successfull close window
-        // else show error message
-        console.log(res);
       });
     } else {
       alert("make sure to submit label, description and client address");
     }
   };
 
+  // clears data on close and hides the modal
   const CloseJob = (e) => {
     e.preventDefault();
     setformData({
@@ -74,6 +73,7 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
     toggle();
   };
 
+  // handles the selection for lavel and client id
   const handleSelect = (valueSelected) => {
     console.log(valueSelected);
     setformData({
@@ -82,8 +82,6 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
       client_id: valueSelected.client_id,
     });
   };
-  // TODO: change the select back to normal
-  //    select the client id and send it back to the server
 
   if (date === "") {
     return visible
@@ -99,60 +97,6 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
                   className="modalInputs"
                   value={formData}
                 />
-
-                {/* <label>Phone Number</label>
-                <input
-                  className="modalInputs"
-                  value={formData.clientNumber}
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
-                  placeholder="3062849011"
-                  onChange={(e) =>
-                    setformData({ ...formData, clientNumber: e.target.value })
-                  }
-                ></input>
-
-                <label>Email</label>
-                <input
-                  className="modalInputs"
-                  value={formData.email}
-                  placeholder="test@gmail.com"
-                  type="text"
-                  onChange={(e) =>
-                    setformData({ ...formData, email: e.target.value })
-                  }
-                ></input>
-
-                <label>Address</label>
-                <input
-                  className="modalInputs"
-                  type="text"
-                  value={formData.clientAddress}
-                  placeholder="808 5th St East"
-                  onChange={(e) =>
-                    setformData({ ...formData, clientAddress: e.target.value })
-                  }
-                ></input>
-
-                <label>Sprinkler</label>
-                <select
-                  className="modalInputs"
-                  name="sprinkers"
-                  value={formData.sprinklerStatus}
-                  onChange={(e) =>
-                    setformData({
-                      ...formData,
-                      sprinklerStatus: e.target.value,
-                    })
-                  }
-                >
-                  <option value="none">None</option>
-                  <option value="front">Front</option>
-                  <option value="back">Back</option>
-                  <option value="both">Both</option>
-                </select> */}
 
                 <label>Description</label>
                 <textarea
@@ -182,7 +126,7 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
                   onChange={(date) => {
                     setformData({
                       ...formData,
-                      date: moment(new Date(date)),
+                      date: moment(date).utc(),
                     });
                   }}
                 />

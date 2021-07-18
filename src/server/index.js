@@ -47,15 +47,14 @@ app.get("/clients", (req, res) => {
   });
 });
 
+// TODO: This needs to be inside a socket because i cant put the socket inside the rest api or the rest api inside the socket
 app.post("/submitJob", (req, res) => {
   let { client_id, description, quote, date } = req.body;
   let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote) VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
   console.log(submitJob);
-  db.none(submitJob, { client_id, description, quote, date }).then((err) => {
-    console.log(err);
-    // res.send(200);
-    // TODO: create Socket emit to update the page jobs
-  });
+  console.log( client_id, description, quote, date);
+  db.any(submitJob, { client_id, description, quote, date });
+  res.send(200);
 });
 
 // app.post('/auth/register', controller.reg);
