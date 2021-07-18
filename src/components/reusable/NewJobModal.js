@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import { socket } from "../../socket";
 
 export const Modal = ({ visible, toggle, date, jobs }) => {
   // Store state for all clients 
@@ -37,25 +38,22 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
     });
   }, []);
 
-  // send info to server
-  const SubmitJob = (e) => {
-    e.preventDefault();
-
-    if (formData.label === "") {
-      setFormState({ ...formState, label: true });
-    }
-    if (formData.descripiton === "") {
-      setFormState({ ...formState, description: true });
-    }
-    if (formData.label !== "" && formData.description !== "") {
-      console.log(formData);
-      // TODO: change this into socket connection
-      axios.post("/submitJob", formData).then((res) => {
-      });
+    const SubmitJob = (e) => {
+      e.preventDefault();
+      
+      if (formData.label === "") {
+        setFormState({ ...formState, label: true });
+      }
+      if (formData.descripiton === "") {
+        setFormState({ ...formState, description: true });
+      }
+      if (formData.label !== "" && formData.description !== "") {
+        console.log(formData);
+        socket.emit('SUBMIT_JOB',formData);
     } else {
       alert("make sure to submit label, description and client address");
     }
-  };
+    }
 
   // clears data on close and hides the modal
   const CloseJob = (e) => {
@@ -68,7 +66,7 @@ export const Modal = ({ visible, toggle, date, jobs }) => {
       sprinklerStatus: "none",
       description: "",
       quote: "",
-      date: new Date(),
+      date:  moment().utc(),
     });
     toggle();
   };

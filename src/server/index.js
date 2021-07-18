@@ -42,20 +42,19 @@ app.post("/auth/login", controller.signin);
 app.get("/clients", (req, res) => {
   let SelectClients = "SELECT * FROM clients;";
   db.any(SelectClients).then((data) => {
-    console.log(data);
     res.send(data);
   });
 });
 
 // TODO: This needs to be inside a socket because i cant put the socket inside the rest api or the rest api inside the socket
-app.post("/submitJob", (req, res) => {
-  let { client_id, description, quote, date } = req.body;
-  let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote) VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
-  console.log(submitJob);
-  console.log( client_id, description, quote, date);
-  db.any(submitJob, { client_id, description, quote, date });
-  res.send(200);
-});
+// app.post("/submitJob", (req, res) => {
+//   let { client_id, description, quote, date } = req.body;
+//   let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote) VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
+//   console.log(submitJob);
+//   console.log( client_id, description, quote, date);
+//   db.any(submitJob, { client_id, description, quote, date });
+//   res.send(200);
+// });
 
 // app.post('/auth/register', controller.reg);
 
@@ -86,19 +85,35 @@ const io = (module.exports.io = require("socket.io")(server, {
 
 let connectCounter = 0;
 io.on("connection", (socket) => {
-  console.log(connectCounter);
   connectCounter++;
-  let SelectJob = `SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2`;
-  socket.on("pgInit", (dates) => {
+  console.log(connectCounter);
+  
+  socket.on("INIT_WEEK", (dates) => {
+    console.log(dates)
+    let SelectJob = `SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2`;
     db.any(SelectJob, dates).then((data) => {
-      socket.emit("initJobs", data);
       console.log(data);
+      socket.emit("INIT_JOBS", data);
     });
   });
+
+  socket.on('SUBMIT_JOB', (formData) => {
+    console.log(formData);
+    // console.log("test");
+    let { client_id, description, quote, date } = formData;
+    let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote) VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
+    console.log(submitJob);
+    console.log( client_id, description, quote, date);
+    db.none(submitJob, { client_id, description, quote, date }).then(() => {
+      console.log("test")
+      // TODO: send update to client
+    });
+  })
 
   socket.on("disconnect", () => {
     socket.removeAllListeners();
     connectCounter--;
+    console.log(connectCounter);
   });
 });
 

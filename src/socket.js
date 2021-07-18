@@ -1,4 +1,4 @@
 import io from "socket.io-client";
-const socketURL =
-  "https://sprouts-control-center.herokuapp.com/" || "http://localhost:5000";
+const socketURL = "http://localhost:5000" ;
+// || "https://sprouts-control-center.herokuapp.com/"
 export const socket = io(socketURL);

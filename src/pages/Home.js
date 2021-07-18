@@ -6,8 +6,7 @@ import Button from "../components/reusable/Button";
 import Modal from "../components/reusable/NewJobModal";
 import "../css/Home.css";
 
-//TODO:
-// get data from here into the modal
+//TODO: get data from here into the modal
 // store the data for date into the useReducer of the modal toggle
 
 function Home() {
@@ -19,13 +18,13 @@ function Home() {
     modalJobs: [],
   });
 
-  const setModalData = (info) => {
-    setActiveModal({
-      openModal: true,
-      modalDate: info.date,
-      modalJobs: info.jobs,
-    });
-  };
+  // const setModalData = (info) => {
+  //   setActiveModal({
+  //     openModal: true,
+  //     modalDate: info.date,
+  //     modalJobs: info.jobs,
+  //   });
+  // };
 
   // use to set initial state for days of week
   useEffect(() => {
@@ -35,7 +34,6 @@ function Home() {
     let lastday = result.clone().weekday(6);
 
     let dates = [firstday, lastday];
-    console.log(dates)
     setWeekDates(dates);
   }, []);
 
@@ -43,10 +41,10 @@ function Home() {
   // TODO: refactor this to use ... like in the modal
   useEffect(() => {
     if (weekDates.length !== 0) {
-      socket.emit("pgInit", weekDates);
+      socket.emit("INIT_WEEK", weekDates);
     }
     if (weekDates.length !== 0) {
-      socket.once("initJobs", (data) => {
+      socket.once("INIT_JOBS", (data) => {
         let InitJson = [
           { day: "", jobs: [] },
           { day: "", jobs: [] },
@@ -70,7 +68,6 @@ function Home() {
           let iter = moment(
             data[i].book_date
           ).utc();
-          console.log(iter)
           InitJson[iter.day()].jobs.push(data[i]);
         }
         // set the information for the useState
@@ -153,7 +150,7 @@ function Home() {
       </>
     );
   } else {
-    return <></>;
+    return <>MISSING DATA OR DATE</>;
   }
 }
 
