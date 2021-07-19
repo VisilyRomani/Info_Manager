@@ -18,13 +18,13 @@ function Home() {
     modalJobs: [],
   });
 
-  // const setModalData = (info) => {
-  //   setActiveModal({
-  //     openModal: true,
-  //     modalDate: info.date,
-  //     modalJobs: info.jobs,
-  //   });
-  // };
+  const setModalData = (info) => {
+    setActiveModal({
+      openModal: true,
+      modalDate: info.date,
+      modalJobs: info.jobs,
+    });
+  };
 
   // use to set initial state for days of week
   useEffect(() => {
@@ -70,6 +70,7 @@ function Home() {
           ).utc();
           InitJson[iter.day()].jobs.push(data[i]);
         }
+        console.log(InitJson)
         // set the information for the useState
         setJobs(InitJson);
       });
@@ -105,6 +106,16 @@ function Home() {
       modalJobs: "",
     });
   };
+
+  const insertJob = (newJobInsert) => {
+    // for(let i=0; i<jobs.length; i++){
+      // if (jobs[i].day ==Insertjob.day){
+        // jobs[i].
+        console.log(jobs)
+        console.log(newJobInsert)
+      // } 
+    // }
+  }
 
   // Display the inital 7 days of the week dynamically
   const ShowWeeks = (props) => {
@@ -145,7 +156,7 @@ function Home() {
           toggle={toggle}
           visible={activeModal.openModal}
           date={activeModal.modalDate}
-          jobs={activeModal.jobs}
+          addJob ={insertJob}
         />
       </>
     );
