@@ -5,10 +5,8 @@ const dbconnect = process.env.DATABASE_URL;
 const db = pgp({
   connectionString: dbconnect,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
 
-module.exports = db
-
-
+module.exports = db;

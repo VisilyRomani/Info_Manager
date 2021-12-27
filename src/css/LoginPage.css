@@ -1,75 +1,73 @@
-body, html {
-    height: 100vh;
-    margin: 0;
+body,
+html {
+  height: 100vh;
+  margin: 0;
 }
-  
-  .bg {
-    background-image: url("../asset/background2.jpg");
-    height: 100vh; 
-    display: block;
 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: fixed;  
-    right: 0;
-    left: 0;
-    z-index: 1;
+.bg {
+  background-image: url("../asset/background2.jpg");
+  height: 100vh;
+  display: block;
 
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-    /* filter: blur(8px); */
-  }
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1;
 
-  .DisAlert{
-    color:red;
-    font-size: 12px;
-    font-style: italic;
-  }
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  /* filter: blur(8px); */
+}
 
-.logo{
+.DisAlert {
+  color: red;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.logo {
   display: flex;
-  justify-self: center;  
+  justify-self: center;
   align-self: center;
   height: auto;
   width: 100%;
-  -webkit-filter: invert(100%); 
+  -webkit-filter: invert(100%);
   filter: invert(100%);
 }
 
+.loginForm.formFlex {
+  z-index: 0;
+  font-family: "Open Sans", sans-serif;
+  background: white;
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* margin: 20px; */
+  max-width: 500px;
+  min-width: 300px;
+  padding: 16px;
+  background-color: white;
+}
 
-  .loginForm.formFlex{
-    z-index: 0;
-    font-family: 'Open Sans', sans-serif;
-    background:white;
-    position: fixed;
-    z-index: 9999;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    /* margin: 20px; */
-    max-width: 500px;
-    min-width: 300px;
-    padding: 16px;
-    background-color: white;
-  }
-
-
-.loginInput{
+.loginInput {
   box-sizing: border-box;
   margin: 10px 0;
   border: 0;
-  box-shadow:3px 5px 9px 1px rgba(0, 0, 0, 0.198);
+  box-shadow: 3px 5px 9px 1px rgba(0, 0, 0, 0.198);
   border-radius: 5px;
   padding: 10px;
   width: 100%;
 }
 
-.submitForm{
-
+.submitForm {
   margin-top: 20px;
   width: 100%;
   font-weight: 300;
@@ -77,10 +75,10 @@ body, html {
   background-color: transparent;
   border: 2px solid rgb(190, 190, 190);
   color: rgb(190, 190, 190);
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   line-height: 2;
 }
-.submitForm:hover{
+.submitForm:hover {
   border: 2px solid rgb(90, 90, 90);
   color: rgb(90, 90, 90);
 }
