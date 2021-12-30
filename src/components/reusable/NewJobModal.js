@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import { socket } from "../../socket";
+// import { socket } from "../../socket";
 
 export const Modal = ({ visible, toggle, date, addJob}) => {
   // Store state for all clients 
@@ -26,11 +26,11 @@ export const Modal = ({ visible, toggle, date, addJob}) => {
     date: moment().utc(),
   });
 
-  socket.on('CONFIRM_JOB', (userInfo)=>{
-    console.log(userInfo)
-    console.log(formData)
-    // addJob(formData);
-  })
+  // socket.on('CONFIRM_JOB', (userInfo)=>{
+  //   console.log(userInfo)
+  //   console.log(formData)
+  //   // addJob(formData);
+  // })
 
   // Gets all clients and stores in the state
   useEffect(() => {

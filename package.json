@@ -24,6 +24,8 @@
     "pg-promise": "^10.10.2",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-calendar": "^3.5.0",
     "react-cookie": "^4.0.3",
     "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",

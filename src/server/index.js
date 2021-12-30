@@ -12,6 +12,7 @@ const origins = [
   "http://localhost:6000",
 ];
 const controller = require("./authController");
+const { ParameterizedQuery } = require("pg-promise");
 const corsOptions = {
   origin: origins,
   optionsSuccessStatus: 200,
@@ -58,56 +59,80 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const server = app.listen(PORT);
 
-const io = (module.exports.io = require("socket.io")(server, {
-  cors: {
-    origins: "*",
-  },
-  handlePreflightRequest: (req, res) => {
-    res.writeHead(200, {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET,POST",
-      "Access-Control-Allow-Headers": "my-custom-header",
-    });
-  },
-}));
-
-let connectCounter = 0;
-io.on("connection", (socket) => {
-  connectCounter++;
-  console.log(connectCounter);
-
-  socket.on("INIT_WEEK", (dates) => {
-    console.log(dates);
-    let SelectJob = `SELECT * FROM jobs FULL OUTER JOIN clients
-     ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2`;
-    db.any(SelectJob, dates).then((data) => {
-      console.log(data);
-      socket.emit("INIT_JOBS", data);
-    });
-  });
-
-  socket.on("SUBMIT_JOB", (formData) => {
-    console.log(formData);
-    // console.log("test");
-    let { client_id, description, quote, date } = formData;
-    let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote)
-     VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
-    db.none(submitJob, { client_id, description, quote, date }).then(() => {
-      // TODO: if it works then db query for the complete user info 
-      socket.emit("CONFIRM_JOB",)
+app.post("/jobdata", (req, res) => {
+  let reqData = req.body.date;
+  const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date = $1', values:reqData});
+  if(reqData != null){
+    db.any(getData).then((data)=> {
+        res.send(data);
     }).catch((err) => {
       console.log(err)
-    });
-  });
+    })
+  }
+})
 
-  socket.on("disconnect", () => {
-    socket.removeAllListeners();
-    connectCounter--;
-    console.log(connectCounter);
-  });
-});
+// const server = app.listen(PORT);
+app.listen(PORT);
+// const io = (module.exports.io = require("socket.io")(server, {
+//   cors: {
+//     origins: "*",
+//   },
+//   handlePreflightRequest: (req, res) => {
+//     res.writeHead(200, {
+//       "Access-Control-Allow-Origin": "*",
+//       "Access-Control-Allow-Methods": "GET,POST",
+//       "Access-Control-Allow-Headers": "my-custom-header",
+//     });
+//   },
+// }));
+
+// let connectCounter = 0;
+// io.on("connection", (socket) => {
+//   connectCounter++;
+//   console.log(connectCounter);
+
+//   socket.on("JOBDATA", (date) => {
+//     console.log(date)
+//     let SelectJob = `SELECT * FROM jobs WHERE book_date = $/date/`;
+    
+//     db.any(SelectJob, {date}).then((data)=> {
+//       socket.emit("JOB_DATA", data)
+//     }).catch((err) => {
+//       console.log(err)
+//     })
+//   });
+
+//   // socket.on("INIT_WEEK", (dates) => {
+//   //   console.log(dates);
+//   //   let SelectJob = `SELECT * FROM jobs FULL OUTER JOIN clients
+//   //    ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2`;
+//   //   db.any(SelectJob, dates).then((data) => {
+//   //     console.log(data);
+//   //     socket.emit("INIT_JOBS", data);
+//   //   });
+//   // });
+
+//   // socket.on("SUBMIT_JOB", (formData) => {
+//   //   console.log(formData);
+//   //   // console.log("test");
+//   //   let { client_id, description, quote, date } = formData;
+//   //   let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote)
+//   //    VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
+//   //   db.none(submitJob, { client_id, description, quote, date }).then(() => {
+//   //     // TODO: if it works then db query for the complete user info 
+//   //     socket.emit("CONFIRM_JOB",)
+//   //   }).catch((err) => {
+//   //     console.log(err)
+//   //   });
+//   // });
+
+//   socket.on("disconnect", () => {
+//     socket.removeAllListeners();
+//     connectCounter--;
+//     console.log(connectCounter);
+//   });
+// });
 
 // shows unhandled rejections when they appear
 process.on("unhandledRejection", (reason, p) => {
