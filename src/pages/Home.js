@@ -14,8 +14,12 @@ function Home() {
     let isMounted = true;
       axios.post("/jobdata",{date:value},{ withCredentials: true }).then((response)=>{
         if(isMounted){
-          setJob(response.data);
-          console.log(response.data)
+          // sort data from database based on index order
+          let preSort = [...response.data];
+          preSort.sort(function (a,b){
+            return a.sort_int - b.sort_int;
+          })
+          setJob(preSort);
         }
       }).catch((err) => {
         console.error(err);
@@ -23,7 +27,6 @@ function Home() {
       return () => {isMounted = false;}
   },[value]);
 
-  console.log(value)
 
   return (
     <div className="container">
@@ -36,8 +39,6 @@ function Home() {
         />
       </div>
       <div className="jobParent">
-         {/* TODO: add the dnd droppable container here so i can change the data in 
-         useState using the array */}
         <ListJobs jobData={job}/>
       </div>
     </div>
