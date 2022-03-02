@@ -1,77 +1,72 @@
 body {
   font-family: "Open Sans", sans-serif;
 }
-.weekButtons {
-  display: flex;
-  justify-content: space-between;
+
+
+ul {
+  list-style: none;
 }
 
-#dispMonth {
-  font-size: 50px;
-  /* font-family: 'Open Sans', sans-serif; */
-  text-align: center;
-  padding-bottom: 10px;
-}
 
-/* 
-####################
 
-Days of week in the home page
 
-####################
-*/
-.mainData {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 80px);
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.topLevelJob {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow-y: auto;
-  height: 100%;
-  /* font-family: 'Open Sans', sans-serif; */
-  background-color: white;
-}
-
-/* .topLevelJob */
-.box {
-  display: flex;
-  border-top: rgba(128, 128, 128, 0.288) 1px solid;
-  height: 100%;
-}
-
-.altrItem {
-  background-color: white;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.altrItem:nth-child(odd) {
-  background-color: rgba(202, 202, 202, 0.205);
-}
-
-.weekDate {
-  padding: 10px;
-  width: 100vw;
-  margin-bottom: 0;
-}
-.numJobs {
-  padding-left: 5vw;
-  padding-bottom: 20px;
-}
-
-/* new job button */
-#newJobButton {
-  bottom: 0;
-  position: sticky;
-  width: 100%;
-  background-color: white;
-  height: 50px;
+li {
+  line-height: 80px;
   margin: 0;
+  background-color: white;
+
+}
+
+li a {
+  width: 1000px;
+  text-decoration: none;
+  color: #111111;
+
+}
+
+
+/* calender css */
+.calendarContainer{
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+
+.c1 {
+  box-shadow: 2px 2px 5px #1111113f;
+  border: none;
+  justify-content: center;
+}
+
+/* job list css */
+.jobParent{
+  display:flex;
+  justify-content: center;
+}
+
+.jobContainer{
+  margin: 10px;
+  width: fit-content;
+  border: 1px solid rgba(0, 0, 0, 0.275); 
+}
+.jobInfo{
+  margin: 10px;
+}
+
+.jobs{
+  margin-top: 20px;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 2rem;
+}
+
+.jobItem{
+  /* box-shadow: 2px 2px 5px #1111113f; */
+  border-radius: 6px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #1111115b;
+  margin:10px
 }

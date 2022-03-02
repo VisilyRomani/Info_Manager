@@ -1,30 +1,55 @@
 import { CommandCompleteMessage } from "pg-protocol/dist/messages";
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
+
 export const ListJobs = (jobData) => {
 
-// TODO: Create a dynanimcally generated list of jobs with react beautiful DnD
-    return(<div>
-        <DragDropContext>
+    const onDragEnd = result => {
+        console.log(result);
+        const {destination, source, draggableId} = result;
+        if (!destination){
+            return;
+        }
+
+        if (destination.droppableId === source.droppableId && destination.index === source.index){
+            return;
+        }
+
+        // console.log(jobData)
+        // const newList = [...jobData.jobData];
+        // console.log(newList)
+        // const [removed] = newList.splice(result.source.index, 1);
+        // newList.splice(result.destination.index, 0, removed);
+        // jobData = newList;
+    }
+
+// TODO:Move some of this crap into the partent Home file
+    return(<div className="jobContainer">
+        <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
-                {(provided) => (
-                    <ul className="jobs" {...provided.droppableProps} ref={provided.innerRef}>
+                {(provided) => (<ul className="jobs"{...provided.droppableProps} ref={provided.innerRef}>
                         {
-                    //    console.log(jobData)
-                       jobData.jobData.map(({job_id, addr, client_name, job_description},index) => {
+                       jobData.jobData.map((item,index) => {
                             return(
-                            <Draggable key={job_id} draggableId={job_id} index={index}>
+                            <Draggable key={item.job_id.toString()} draggableId={item.job_id.toString()} index={index}>
                                 {(provided) => (
-                                    <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                        <div className="inner-job">
-                                            <a href={"https://maps.google.com/?q="+addr}>
-                                                {addr}
-                                            </a>
-                                        </div>
+                                    <li className="jobItem" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                        {/* TODO: Put client name and job description here */}
+                                           <div className="jobInfo">
+                                                {'Client Name: ' + item.client_name}
+
+                                                <a href={"https://maps.google.com/?q="+item.addr}>
+                                                    {item.addr}
+                                                </a>
+
+                                                {'Job Description: ' + item.job_description}
+                                           </div>
                                     </li>
                                 )}
                             </Draggable>)
                         }) 
                         }
+                        {provided.placeholder}
+
                     </ul>
                 )}
             </Droppable>
