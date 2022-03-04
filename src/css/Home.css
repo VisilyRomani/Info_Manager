@@ -2,7 +2,7 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-
+/* TODO: fix this css because it breaks the tool bar */
 ul {
   list-style: none;
 }

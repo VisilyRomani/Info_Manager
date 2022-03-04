@@ -27,6 +27,10 @@ function Home() {
       return () => {isMounted = false;}
   },[value]);
 
+  useEffect(() => {
+    console.log(value);
+  },[value]);
+
 
   return (
     <div className="container">

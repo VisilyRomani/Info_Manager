@@ -36,7 +36,6 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
-// TODO: Create all new functions inside database for database things to grab from here
 
 app.get("/auth/jwt", controller.check);
 
@@ -75,14 +74,18 @@ app.post("/jobdata", (req, res) => {
 })
 
 
+// 
 app.post("/sortupdate", (req, res) => {
   let jobList = req.body.job_order;
-
   if (jobList.length != 0){
-    // const cs = new pgp.helpers.ColumnSet(['sort_int'], {table:'jobs'});
     const query = pgp.helpers.update(jobList, cs) + ' WHERE v.job_id = t.job_id' ;
-    db.none(query);
+    db.none(query).then(()=> {
+      res.send(200);
+    }).catch((err) => {
+      res.send(err);
+    });
   }
+  res.send(200);
 })
 
 app.listen(PORT);
