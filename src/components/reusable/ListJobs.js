@@ -1,6 +1,7 @@
 import { CommandCompleteMessage } from "pg-protocol/dist/messages";
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import React, {useState, useEffect} from 'react';
+import axios from "axios";
 export const ListJobs = (jobData) => {
     const [job_order, setJobOrder] = useState(jobData.jobData);
     const onDragEnd = result => {
@@ -24,11 +25,18 @@ export const ListJobs = (jobData) => {
         });
     }
 
+    // sets the initial data on change
     useEffect(() => {
         setJobOrder(jobData.jobData);
-        // TODO: check that this is proper data then update the database if it is
-        console.log(job_order);
       },[jobData]);
+
+    //  updates the database when change happens
+      useEffect(() => {
+        axios.post("/sortupdate", {job_order},{ withCredentials: true}).then((response) => {
+            console.log(response);
+        });
+        console.log(job_order);
+      },[job_order]);
 
     return(<div className="jobContainer">
         <DragDropContext onDragEnd={onDragEnd}>

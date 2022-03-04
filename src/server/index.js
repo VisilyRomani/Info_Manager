@@ -4,7 +4,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const db = require("./database");
+const {db, cs, pgp} = require("./database");
 const app = express();
 const origins = [
   "https://sprouts-control-center.herokuapp.com",
@@ -35,6 +35,8 @@ app.use((req, res, next) => {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
+
+// TODO: Create all new functions inside database for database things to grab from here
 
 app.get("/auth/jwt", controller.check);
 
@@ -72,67 +74,18 @@ app.post("/jobdata", (req, res) => {
   }
 })
 
-// const server = app.listen(PORT);
+
+app.post("/sortupdate", (req, res) => {
+  let jobList = req.body.job_order;
+
+  if (jobList.length != 0){
+    // const cs = new pgp.helpers.ColumnSet(['sort_int'], {table:'jobs'});
+    const query = pgp.helpers.update(jobList, cs) + ' WHERE v.job_id = t.job_id' ;
+    db.none(query);
+  }
+})
+
 app.listen(PORT);
-// const io = (module.exports.io = require("socket.io")(server, {
-//   cors: {
-//     origins: "*",
-//   },
-//   handlePreflightRequest: (req, res) => {
-//     res.writeHead(200, {
-//       "Access-Control-Allow-Origin": "*",
-//       "Access-Control-Allow-Methods": "GET,POST",
-//       "Access-Control-Allow-Headers": "my-custom-header",
-//     });
-//   },
-// }));
-
-// let connectCounter = 0;
-// io.on("connection", (socket) => {
-//   connectCounter++;
-//   console.log(connectCounter);
-
-//   socket.on("JOBDATA", (date) => {
-//     console.log(date)
-//     let SelectJob = `SELECT * FROM jobs WHERE book_date = $/date/`;
-    
-//     db.any(SelectJob, {date}).then((data)=> {
-//       socket.emit("JOB_DATA", data)
-//     }).catch((err) => {
-//       console.log(err)
-//     })
-//   });
-
-//   // socket.on("INIT_WEEK", (dates) => {
-//   //   console.log(dates);
-//   //   let SelectJob = `SELECT * FROM jobs FULL OUTER JOIN clients
-//   //    ON clients.client_id = jobs.client_id WHERE book_date between $1 AND $2`;
-//   //   db.any(SelectJob, dates).then((data) => {
-//   //     console.log(data);
-//   //     socket.emit("INIT_JOBS", data);
-//   //   });
-//   // });
-
-//   // socket.on("SUBMIT_JOB", (formData) => {
-//   //   console.log(formData);
-//   //   // console.log("test");
-//   //   let { client_id, description, quote, date } = formData;
-//   //   let submitJob = `INSERT INTO jobs(job_description, client_id, book_date, quote)
-//   //    VALUES($/description/, $/client_id/, $/date/, $/quote/)`;
-//   //   db.none(submitJob, { client_id, description, quote, date }).then(() => {
-//   //     // TODO: if it works then db query for the complete user info 
-//   //     socket.emit("CONFIRM_JOB",)
-//   //   }).catch((err) => {
-//   //     console.log(err)
-//   //   });
-//   // });
-
-//   socket.on("disconnect", () => {
-//     socket.removeAllListeners();
-//     connectCounter--;
-//     console.log(connectCounter);
-//   });
-// });
 
 // shows unhandled rejections when they appear
 process.on("unhandledRejection", (reason, p) => {
