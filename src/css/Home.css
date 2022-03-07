@@ -3,26 +3,6 @@ body {
 }
 
 /* TODO: fix this css because it breaks the tool bar */
-ul {
-  list-style: none;
-}
-
-
-
-
-li {
-  line-height: 80px;
-  margin: 0;
-  background-color: white;
-
-}
-
-li a {
-  width: 1000px;
-  text-decoration: none;
-  color: #111111;
-
-}
 
 
 /* calender css */
@@ -45,28 +25,64 @@ li a {
   justify-content: center;
 }
 
+.titleRow{
+  display: flex;
+  flex-direction: row;
+  padding: 3%;
+  border-bottom: #1111112c solid 1px ;
+  font-weight: bold;
+  justify-content: space-between;
+  color: aliceblue;
+  background-color: #9c9b9b;
+}
+
 .jobContainer{
   margin: 10px;
-  width: fit-content;
+  width: 90%;
   border: 1px solid rgba(0, 0, 0, 0.275); 
+  height: fit-content;
 }
 .jobInfo{
   margin: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-grow:1;
+  justify-content: space-between;
 }
 
 .jobs{
-  margin-top: 20px;
+  /* margin-top: 20px; */
   display:flex;
   justify-content: center;
   flex-direction: column;
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 .jobItem{
   /* box-shadow: 2px 2px 5px #1111113f; */
-  border-radius: 6px;
-  border-style: solid;
+  /* border-radius: 6px; */
+  border-bottom: #1111112c solid 1px ;
+  /* border-style: solid; */
   border-width: 1px;
-  border-color: #1111115b;
-  margin:10px
+  /* border-color: #1111115b; */
+  margin:10px;
+  display: flex;
+  flex-direction: row;  
+  /* list-style: none; */
 }
+
+.clientName{
+
+}
+.addr{
+
+  
+}
+.addr a {
+  text-decoration: none;
+  color: black;
+}
+.status {
+
+}
+

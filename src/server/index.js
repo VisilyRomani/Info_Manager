@@ -80,12 +80,13 @@ app.put("/sortupdate", (req, res) => {
   if (jobList.length != 0){
     const query = pgp.helpers.update(jobList, cs) + ' WHERE v.job_id = t.job_id' ;
     db.none(query).then(()=> {
-      res.send(200);
+      res.sendStatus(200);
     }).catch((err) => {
       res.send(err);
     });
+  }else{
+    res.sendStatus(300);
   }
-  res.send(200);
 })
 
 app.listen(PORT);

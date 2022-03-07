@@ -45,6 +45,11 @@ export const ListJobs = (jobData) => {
         return "In-Progress"
       }
     return(<div className="jobContainer">
+        <div className="titleRow">
+            <div>Name</div>
+            <div>Address</div>
+            <div>Status</div>
+        </div>
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
                 {(provided) => (<ul className="jobs"{...provided.droppableProps} ref={provided.innerRef}>
@@ -53,24 +58,25 @@ export const ListJobs = (jobData) => {
                             return(
                             <Draggable key={item.job_id.toString()} draggableId={item.job_id.toString()} index={index}>
                                 {(provided) => (
-                                    <li className="jobItem" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                    <ul className="jobItem" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                       
                                         {/* TODO: Put client name and job description here */}
                                            <div className="jobInfo">
                                                 <div className="clientName">
                                                     {item.client_name}
                                                 </div>
                                                 
-                                                <div>
+                                                <div className="addr">
                                                     <a href={"https://maps.google.com/?q="+item.addr}>
                                                         {item.addr}
                                                     </a>
                                                 </div>
-                                                <div>
+                                                <div className="status">
                                                     {status(item.status)}
                                                 </div>
                                                 
                                            </div>
-                                    </li>
+                                    </ul>
                                 )}
                             </Draggable>)
                         }) 
