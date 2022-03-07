@@ -1,4 +1,3 @@
-import { CommandCompleteMessage } from "pg-protocol/dist/messages";
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
@@ -22,6 +21,7 @@ export const ListJobs = (jobData) => {
         // updates sort int with index 
         newList.map((item,index) =>  {
             item.sort_int = index;
+            return item;
         });
     }
 
@@ -32,12 +32,18 @@ export const ListJobs = (jobData) => {
 
     //  updates the database when change happens
       useEffect(() => {
-        axios.post("/sortupdate", {job_order},{ withCredentials: true}).then((response) => {
-            console.log(response);
-        });
-        console.log(job_order);
+          if(job_order.length !== 0 ){
+            axios.put("/sortupdate", {job_order},{ withCredentials: true}).then((response) => {
+            });
+          }
       },[job_order]);
 
+      let status = (status) => {
+        if(status){
+            return "Completed"    
+        }
+        return "In-Progress"
+      }
     return(<div className="jobContainer">
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
@@ -50,13 +56,19 @@ export const ListJobs = (jobData) => {
                                     <li className="jobItem" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                         {/* TODO: Put client name and job description here */}
                                            <div className="jobInfo">
-                                                {'Client Name: ' + item.client_name}
-
-                                                <a href={"https://maps.google.com/?q="+item.addr}>
-                                                    {item.addr}
-                                                </a>
-
-                                                {'Job Description: ' + item.job_description}
+                                                <div className="clientName">
+                                                    {item.client_name}
+                                                </div>
+                                                
+                                                <div>
+                                                    <a href={"https://maps.google.com/?q="+item.addr}>
+                                                        {item.addr}
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    {status(item.status)}
+                                                </div>
+                                                
                                            </div>
                                     </li>
                                 )}

@@ -74,8 +74,8 @@ app.post("/jobdata", (req, res) => {
 })
 
 
-// 
-app.post("/sortupdate", (req, res) => {
+// updates database on update
+app.put("/sortupdate", (req, res) => {
   let jobList = req.body.job_order;
   if (jobList.length != 0){
     const query = pgp.helpers.update(jobList, cs) + ' WHERE v.job_id = t.job_id' ;

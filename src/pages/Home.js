@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import Button from "../components/reusable/Button";
 import axios from "axios";
 import { ListJobs } from "../components/reusable/ListJobs";
 import 'react-calendar/dist/Calendar.css';
@@ -25,10 +24,6 @@ function Home() {
         console.error(err);
       });
       return () => {isMounted = false;}
-  },[value]);
-
-  useEffect(() => {
-    console.log(value);
   },[value]);
 
 
