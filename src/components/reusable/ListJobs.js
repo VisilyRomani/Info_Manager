@@ -1,6 +1,9 @@
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import React, {useState, useEffect} from 'react';
+
+import { NewJobModal } from "../components/reusable/NewJobModal";
 import axios from "axios";
+import { render } from "@testing-library/react";
 export const ListJobs = (jobData) => {
     const [job_order, setJobOrder] = useState(jobData.jobData);
     const onDragEnd = result => {
@@ -13,7 +16,6 @@ export const ListJobs = (jobData) => {
         if (destination.droppableId === source.droppableId && destination.index === source.index){
             return;
         }
-
         const newList = Array.from(job_order);
         const [removed] = newList.splice(result.source.index, 1);
         newList.splice(result.destination.index, 0, removed);
@@ -44,6 +46,12 @@ export const ListJobs = (jobData) => {
         }
         return "In-Progress"
       }
+
+      let click = () => {
+        // console.log("click")
+        render(<NewJobModal/>)
+      }
+
     return(<div className="jobContainer">
         <div className="titleRow">
             <div>Name</div>
@@ -58,7 +66,7 @@ export const ListJobs = (jobData) => {
                             return(
                             <Draggable key={item.job_id.toString()} draggableId={item.job_id.toString()} index={index}>
                                 {(provided) => (
-                                    <ul className="jobItem" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                    <ul className="jobItem" onClick={click} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                        
                                         {/* TODO: Put client name and job description here */}
                                            <div className="jobInfo">
