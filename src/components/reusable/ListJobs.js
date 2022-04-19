@@ -1,13 +1,16 @@
 import { Draggable, DragDropContext, Droppable } from "react-beautiful-dnd";
 import React, {useState, useEffect} from 'react';
-
-import { NewJobModal } from "../components/reusable/NewJobModal";
 import axios from "axios";
-import { render } from "@testing-library/react";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+
+
 export const ListJobs = (jobData) => {
+    const [modal, setModal] = useState({state:false, activeItem:{}});
     const [job_order, setJobOrder] = useState(jobData.jobData);
+
+    // Update drag data
     const onDragEnd = result => {
-        console.log(result);
         const {destination, source, draggableId} = result;
         if (!destination){
             return;
@@ -34,30 +37,75 @@ export const ListJobs = (jobData) => {
 
     //  updates the database when change happens
       useEffect(() => {
-          if(job_order.length !== 0 ){
+        if(job_order.length !== 0 ){
+            // TODO: write message?
             axios.put("/sortupdate", {job_order},{ withCredentials: true}).then((response) => {
             });
-          }
+        }
       },[job_order]);
 
+      // Check for Status of Job
       let status = (status) => {
         if(status){
-            return "Completed"    
+            return "🟢 Completed"    
         }
-        return "In-Progress"
+        return "🔴 In-Progress"
       }
 
-      let click = () => {
-        // console.log("click")
-        render(<NewJobModal/>)
+
+
+    //   Modal View of Job
+      const NewJobModal = () => {
+        let item = modal.activeItem;
+
+        const finishJob = () => {
+            item.status = !item.status;
+            console.log(item);
+            setModal({activeItem:{...item}})
+            axios.put("/finishjob", {item}, { withCredentials: true}).then((response) => {
+            });
+
+        }
+
+        if(item == null){
+            return(<></>)
+        }else{
+            return (
+                <>
+                  <Modal show={modal.state} fullscreen={true} onHide={() => setModal({state:false})}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Job</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <div>Client: {item.client_name}</div>
+                      <div>Email: {item.email}</div>
+                      <div>Phone: {item.phone_num}</div>
+                      <div>Address: {item.addr}</div>
+                      
+                      <div>Description: {item.job_description}</div>
+                      <div>Sprinkers: {item.sprinklers}</div>
+                      <div>Quote: {item.quote}</div>
+                      <div>Job Status: {status(item.status)}</div>
+                      <Button onClick={() => {setModal({state:!modal.state})}}>Close</Button>
+                      <Button onClick={() => {finishJob()}}>Finish Job</Button>
+                    </Modal.Body>
+                  </Modal>
+                </>
+              );
+        }
       }
+
+
+
 
     return(<div className="jobContainer">
+
         <div className="titleRow">
             <div>Name</div>
             <div>Address</div>
             <div>Status</div>
         </div>
+        <NewJobModal/>
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
                 {(provided) => (<ul className="jobs"{...provided.droppableProps} ref={provided.innerRef}>
@@ -66,16 +114,14 @@ export const ListJobs = (jobData) => {
                             return(
                             <Draggable key={item.job_id.toString()} draggableId={item.job_id.toString()} index={index}>
                                 {(provided) => (
-                                    <ul className="jobItem" onClick={click} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                       
-                                        {/* TODO: Put client name and job description here */}
+                                    <ul className="jobItem" onClick={() => {setModal({state:true, activeItem:item})}} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                            <div className="jobInfo">
                                                 <div className="clientName">
                                                     {item.client_name}
                                                 </div>
                                                 
                                                 <div className="addr">
-                                                    <a href={"https://maps.google.com/?q="+item.addr}>
+                                                    <a href={"https://maps.google.com/?q="+item.addr} onClick={(e)=> {e.stopPropagation()}}>
                                                         {item.addr}
                                                     </a>
                                                 </div>
@@ -90,7 +136,6 @@ export const ListJobs = (jobData) => {
                         }) 
                         }
                         {provided.placeholder}
-
                     </ul>
                 )}
             </Droppable>

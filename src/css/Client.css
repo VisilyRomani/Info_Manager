@@ -1,0 +1,22 @@
+#clientForm {
+    display: flex;
+    flex-direction: row;
+}
+
+#formCol1 {
+    min-width: 50%;
+}
+
+#formCol2 {
+    min-width: 50%;
+}
+
+@media (max-width: 700px) {
+    #clientForm {
+        flex-direction: column;
+    }
+
+    #clientForm {
+        flex: 1;
+    }
+}

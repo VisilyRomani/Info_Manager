@@ -89,6 +89,19 @@ app.put("/sortupdate", (req, res) => {
   }
 })
 
+//TODO: ErrorChecking
+app.put("/finishjob", (req, res) => {
+  item = req.body.item
+  const updateStatus = new ParameterizedQuery({text: 'UPDATE Jobs set status = $1 WHERE job_id = $2', values:[item.status ,item.job_id]});
+  console.log(updateStatus);
+  db.none(updateStatus).then(()=> {
+    res.sendStatus(200);
+  })
+});
+
+
+//TODO: insert data for new client into database
+
 app.listen(PORT);
 
 // shows unhandled rejections when they appear

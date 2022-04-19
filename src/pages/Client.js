@@ -1,63 +1,87 @@
-import React from "react";
-
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import {Form,FormGroup, Button, Table} from "react-bootstrap";
+import "../css/Client.css"
 function Client() {
+  const [client, setClient] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+      axios.get("/clients",{ withCredentials: true }).then((response)=>{
+        if(isMounted){
+          console.log(response.data)
+          setClient(response.data);
+        }
+      }).catch((err) => {
+        console.error(err);
+      });
+      return () => {isMounted = false;}
+  },[]);
+
+//TODO: submit form to database
+
+//TODO: format css
+
   return (
-    
     <div>
-      {/* <label>Phone Number</label>
-        <input
-          className="modalInputs"
-          value={formData.clientNumber}
-          type="tel"
-          id="phone"
-          name="phone"
-          pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
-          placeholder="3062849011"
-          onChange={(e) =>
-            setformData({ ...formData, clientNumber: e.target.value })
-          }
-        ></input>
+      <h1>Client</h1>
+      <div>
+        <Form id="clientForm">
+        <div id="formCol1">
+          <FormGroup>
+            <Form.Label>Name</Form.Label>
+            <Form.Control placeholder="Enter Name" />
+          </FormGroup>
+          <FormGroup>
+            <Form.Label>Address</Form.Label>
+            <Form.Control placeholder="Enter Address" />
+          </FormGroup>
+          <FormGroup>
+            <Form.Label>Number</Form.Label>
+            <Form.Control placeholder="Enter Number" />
+          </FormGroup>
+          </div>
 
-        <label>Email</label>
-        <input
-          className="modalInputs"
-          value={formData.email}
-          placeholder="test@gmail.com"
-          type="text"
-          onChange={(e) =>
-            setformData({ ...formData, email: e.target.value })
-          }
-        ></input>
-
-        <label>Address</label>
-        <input
-          className="modalInputs"
-          type="text"
-          value={formData.clientAddress}
-          placeholder="808 5th St East"
-          onChange={(e) =>
-            setformData({ ...formData, clientAddress: e.target.value })
-          }
-        ></input>
-
-        <label>Sprinkler</label>
-        <select
-          className="modalInputs"
-          name="sprinkers"
-          value={formData.sprinklerStatus}
-          onChange={(e) =>
-            setformData({
-              ...formData,
-              sprinklerStatus: e.target.value,
-            })
-          }
-        >
-          <option value="none">None</option>
-          <option value="front">Front</option>
-          <option value="back">Back</option>
-          <option value="both">Both</option>
-        </select> */}
-      <h1>client</h1>
+          <div id="formCol2">
+            <FormGroup>
+              <Form.Label>Email</Form.Label>
+              <Form.Control placeholder="Enter Email" />
+            </FormGroup>
+            <FormGroup>
+              <Form.Label>Sprinkers</Form.Label>
+              <Form.Select>
+                <option>Yes</option>
+                <option>No</option>
+              </Form.Select>
+            </FormGroup>
+            <Button type="submit">Submit</Button>
+          </div>
+        </Form>
+      </div>
+      <div>
+    <Table responsive>
+      <thead>
+        <tr>
+          <th key={0}>Name</th>
+          <th key={1}>Email</th>
+          <th key={2}>Address</th>
+          <th key={3}>Number</th>
+          <th key={4}>Sprinkers</th>
+        </tr>
+      </thead>
+      <tbody>
+      {client.map((item, index) => (
+              <tr>
+                <td>{item.client_name}</td>
+                <td>{item.addr}</td>
+                <td>{item.email}</td>
+                <td>{item.phone_num}</td>
+                <td>{item.sprinklers}</td>
+              </tr>
+            ))}
+      </tbody>
+    </Table>
+      </div>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import Quotes from "./pages/Quotes";
 import TimeSheet from "./pages/TimeSheet";
 import Page404 from "./pages/Page404";
 import Client from "./pages/Client";
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 function App() {
