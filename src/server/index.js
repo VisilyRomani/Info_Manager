@@ -41,7 +41,7 @@ app.get("/auth/jwt", controller.check);
 
 app.post("/auth/login", controller.signin);
 
-app.get("/clients", (req, res) => {
+app.get("/clients", (res) => {
   let SelectClients = "SELECT * FROM clients;";
   db.any(SelectClients).then((data) => {
     res.send(data);
@@ -73,6 +73,17 @@ app.post("/jobdata", (req, res) => {
   }
 })
 
+app.get("/alljobdata", (req, res) => {
+  const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs LEft JOIN clients ON jobs.client_id = clients.client_id'});
+  db.manyOrNone(getData).then((data) => {
+    console.log(data)
+    res.send(data);
+  }).catch((err) => {
+    console.log(err);
+  })
+
+})
+
 
 // updates database on update
 app.put("/sortupdate", (req, res) => {
@@ -91,7 +102,7 @@ app.put("/sortupdate", (req, res) => {
 
 //TODO: ErrorChecking
 app.put("/finishjob", (req, res) => {
-  item = req.body.item
+  let item = req.body.item
   const updateStatus = new ParameterizedQuery({text: 'UPDATE Jobs set status = $1 WHERE job_id = $2', values:[item.status ,item.job_id]});
   console.log(updateStatus);
   db.none(updateStatus).then(()=> {
@@ -99,8 +110,17 @@ app.put("/finishjob", (req, res) => {
   })
 });
 
+app.post("/newclient", (req, res) => {
+  let data = req.body.data;
+  
+  const newClient = new ParameterizedQuery({text: 'INSERT INTO clients (client_name, addr, phone_num, email, sprinklers, date_added) VALUES($1,$2,$3,$4,$5,$6)', values:[data.clientName, data.clientAddress, data.clientNumber, data.clientEmail, data.clientSprinkler, new Date]}); 
+  console.log(newClient)
+  db.none(newClient).then(()=> {
+    res.sendStatus(200);
+  });
 
-//TODO: insert data for new client into database
+});
+
 
 app.listen(PORT);
 

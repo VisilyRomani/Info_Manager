@@ -1,70 +1,161 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {Form,FormGroup, Button, Table} from "react-bootstrap";
+import {Form,FormGroup, Button, Table, Container} from "react-bootstrap";
 import "../css/Client.css"
+import {Formik} from "formik";
+import Select from 'react-select'
+import * as Yup from 'yup';
 function Client() {
+    // TODO: fix unique key prop for table
   const [client, setClient] = useState([]);
+
+  const fetchClient = () => {
+      axios.get("/clients",{ withCredentials: true }).then((response)=>{
+        console.log(response.data)
+        setClient(response.data);
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  const addClient = (client, values) => {
+    axios.post("/newclient",{data:values},{ withCredentials: true }).then((response)=>{
+      console.log("success")
+      let newList = client;
+      let newItem = {client_name:values.clientName,
+      addr:values.clientAddress,
+      phone_num:values.clientNumber,
+      email:values.clientEmail,
+      sprinklers:values.clientSprinkler}
+      newList.push(newItem)
+      setClient(newList)
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
 
   useEffect(() => {
     let isMounted = true;
-      axios.get("/clients",{ withCredentials: true }).then((response)=>{
-        if(isMounted){
-          console.log(response.data)
-          setClient(response.data);
-        }
-      }).catch((err) => {
-        console.error(err);
-      });
+    if (isMounted){
+      fetchClient();
+    }
       return () => {isMounted = false;}
   },[]);
 
-//TODO: submit form to database
+  const validationSchema = Yup.object().shape({
+    clientName: Yup.string().min(2, "*Names must have at least 2 characters")
+    .max(100, "*Names can't be longer than 100 characters")
+    .required("*Name is required"),
+    clientAddress: Yup.string().required("*Address is required"),
+    clientNumber: Yup.string(),
+    clientEmail: Yup.string().email("*Must be a valid email address")
+    .max(100, "*Email must be less than 100 characters"),
+    clientSprinkler: Yup.string().required()
+  });
 
-//TODO: format css
 
   return (
     <div>
       <h1>Client</h1>
-      <div>
-        <Form id="clientForm">
-        <div id="formCol1">
-          <FormGroup>
-            <Form.Label>Name</Form.Label>
-            <Form.Control placeholder="Enter Name" />
-          </FormGroup>
-          <FormGroup>
-            <Form.Label>Address</Form.Label>
-            <Form.Control placeholder="Enter Address" />
-          </FormGroup>
-          <FormGroup>
-            <Form.Label>Number</Form.Label>
-            <Form.Control placeholder="Enter Number" />
-          </FormGroup>
-          </div>
+      <Container>
+        <Formik validationSchema={validationSchema}
+        initialValues={{
+          clientName:'',
+          clientAddress:'',
+          clientNumber:'',
+          clientEmail:'',
+          clientSprinkler:''
+          }}
+          onSubmit={(values, {setSubmitting, resetForm}) => {
+            // When button submits form and form is in the process of submitting, submit button is disabled
+            setSubmitting(true);
+            // Resets form after submission is complete            
+            addClient(client, values);
+            resetForm();
+            fetchClient();
+            setSubmitting(false);
+        }}>
 
-          <div id="formCol2">
-            <FormGroup>
-              <Form.Label>Email</Form.Label>
-              <Form.Control placeholder="Enter Email" />
+          {( {values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting }) =>(
+          <Form onSubmit={handleSubmit} id="clientForm">
+          <div id="formCol1">
+            <FormGroup className="form-group">
+              <Form.Label>Name</Form.Label>
+              <Form.Control 
+              name="clientName" 
+              onChange={handleChange} 
+              onBlur={handleBlur} 
+              value={values.clientName} 
+              placeholder="Enter Name"
+              className={touched.clientName && errors.clientName ? "error" : null}/>
+              {touched.clientName && errors.clientName ? (<div className="error-message">{errors.clientName}</div>): null}
             </FormGroup>
-            <FormGroup>
-              <Form.Label>Sprinkers</Form.Label>
-              <Form.Select>
-                <option>Yes</option>
-                <option>No</option>
-              </Form.Select>
+            <FormGroup className="form-group">
+              <Form.Label>Address</Form.Label>
+              <Form.Control 
+              name="clientAddress" 
+              onChange={handleChange} 
+              onBlur={handleBlur} 
+              value={values.clientAddress} 
+              placeholder="Enter Address" 
+              className={touched.clientAddress && errors.clientAddress ? "error" : null}/>
+              {touched.clientAddress && errors.clientAddress ? (<div className="error-message">{errors.clientAddress}</div>): null}
             </FormGroup>
-            <Button type="submit">Submit</Button>
-          </div>
-        </Form>
-      </div>
-      <div>
+            <FormGroup className="form-group">
+              <Form.Label>Number</Form.Label>
+              <Form.Control 
+              name="clientNumber" 
+              onChange={handleChange}
+              onBlur={handleBlur} 
+              value={values.clientNumber} 
+              placeholder="Enter Number"
+              className={touched.clientNumber && errors.clientNumber ? "error" : null} />
+              {touched.clientNumber && errors.clientNumber ? (<div className="error-message">{errors.clientNumber}</div>): null}
+            </FormGroup>
+            </div>
+
+            <div id="formCol2">
+              <FormGroup className="form-group">
+                <Form.Label>Email</Form.Label>
+                <Form.Control 
+                name="clientEmail" 
+                onChange={handleChange} 
+                onBlur={handleBlur} 
+                value={values.clientEmail} 
+                placeholder="Enter Email"
+                className={touched.clientEmail && errors.clientEmail ? "error" : null} />
+                {touched.clientEmail && errors.clientEmail ? (<div className="error-message">{errors.naclientEmailme}</div>): null}
+              </FormGroup>
+              <FormGroup className="form-group">
+                <Form.Label>Sprinkers</Form.Label>
+                <Form.Control 
+                name="clientSprinkler" 
+                onChange={handleChange} 
+                onBlur={handleBlur} 
+                value={values.clientSprinkler} 
+                placeholder="Sprinklers"
+                className={touched.clientSprinkler && errors.clientSprinkler ? "error" : null} />
+                {touched.clientSprinkler && errors.clientSprinkler ? (<div className="error-message">{errors.clientSprinkler}</div>): null}
+              </FormGroup>
+              <Button variant="primary" type="submit" disabled={isSubmitting}>Submit</Button>
+            </div>
+          </Form>
+          )}
+        </Formik>
+      </Container>
+      <Container>
     <Table responsive>
       <thead>
         <tr>
           <th key={0}>Name</th>
-          <th key={1}>Email</th>
-          <th key={2}>Address</th>
+          <th key={1}>Address</th>
+          <th key={2}>Email</th>
           <th key={3}>Number</th>
           <th key={4}>Sprinkers</th>
         </tr>
@@ -81,7 +172,7 @@ function Client() {
             ))}
       </tbody>
     </Table>
-      </div>
+      </Container>
     </div>
   );
 }
