@@ -1,8 +1,7 @@
 import React from "react";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
-import * as BsIcons from 'react-icons/bs';
-
+import { BsPeopleCircle } from "react-icons/bs";
 export const NavData = [
   {
     title: "Schedule",
@@ -31,7 +30,7 @@ export const NavData = [
   {
     title: "Clients",
     path: "/clients",
-    icon: <BsIcons.BsPeopleCircle />,
+    icon: <BsPeopleCircle />,
     cName: "nav-text",
   },
 ];
