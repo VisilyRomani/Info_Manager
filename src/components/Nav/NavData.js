@@ -1,6 +1,7 @@
 import React from "react";
 import {AiFillBook, AiFillCalendar, AiFillHome} from "react-icons/ai";
 import {IoPeople} from "react-icons/io5";
+import {MdPersonPin} from "react-icons/md";
 // import { BsPeopleCircle } from "react-icons/bs";
 export const NavData = [
   {
@@ -30,7 +31,7 @@ export const NavData = [
   {
     title: "Clients",
     path: "/clients",
-    icon: <></>,
+    icon: <MdPersonPin/>,
     cName: "nav-text",
   },
 ];

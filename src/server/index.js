@@ -5,6 +5,8 @@ const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const {db, cs, pgp} = require("./database");
+const helmet = require('helmet');
+const { uuid } = require('uuidv4');
 const app = express();
 const origins = [
   "https://sprouts-control-center.herokuapp.com",
@@ -20,21 +22,40 @@ const corsOptions = {
 };
 const scriptSrcUrls = [];
 const styleSrcUrls = [];
-const contentSecurityPolicy = [
-  "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
-  "style-src 'self' " + styleSrcUrls.join(" "),
-  "img-src 'self' " + styleSrcUrls.join(" "),
-].join(";");
+// const contentSecurityPolicy = [
+//   "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
+//   "style-src 'self' " + styleSrcUrls.join(" "),
+//   "img-src 'self' " + styleSrcUrls.join(" "),
+// ].join(";");
 
-// CSP headers
+// // CSP headers
+// app.use((req, res, next) => {
+//   res.setHeader("Content-Security-Policy", contentSecurityPolicy);
+//   next();
+// });
+
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", contentSecurityPolicy);
-  next();
-});
+  // nonce should be base64 encoded
+  res.locals.styleNonce = Buffer.from(uuid()).toString('base64')
+  next()
+})
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      /* ... */
+      styleSrc: ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
+    }
+  })
+)
+
 // Cors
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
+
+
 
 
 app.get("/auth/jwt", controller.check);

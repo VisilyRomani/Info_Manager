@@ -55,8 +55,8 @@ export const ListJobs = (jobData) => {
 
 
     //   Modal View of Job
-      const NewJobModal = () => {
-        let item = modal.activeItem;
+        const NewJobModal = () => {
+            let item = modal.activeItem;
 
         const finishJob = () => {
             item.status = !item.status;
@@ -66,6 +66,7 @@ export const ListJobs = (jobData) => {
             });
 
         }
+
 
         if(item == null){
             return(<></>)
@@ -106,7 +107,7 @@ export const ListJobs = (jobData) => {
             <div>Status</div>
         </div>
         <NewJobModal/>
-        <DragDropContext  nonce={getNonce()} onDragEnd={onDragEnd}>
+        <DragDropContext  nonce='csp-nonce' onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
                 {(provided) => (<ul className="jobs"{...provided.droppableProps} ref={provided.innerRef}>
                         {
