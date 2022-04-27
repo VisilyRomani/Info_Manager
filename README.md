@@ -14,7 +14,7 @@ This is a personal project work in progress that consists of internal web tools 
 - React-Bootstrap 2.2.3
 - Bcrypt 5.0.1
 - Express 4.17.1
-- PostGreSQL 13.6
+- PostgreSQL 13.6
 
 ## Setup
 ```
