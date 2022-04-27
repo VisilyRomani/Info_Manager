@@ -44,7 +44,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc:["script-src", 'unsafe-inline', 'self' + scriptSrcUrls.join(" ")],
+      scriptSrc:["script-src", 'unsafe-inline', 'self', "https://sprouts-control-center.herokuapp.com/"],
       /* ... */
       styleSrc: ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
     }
