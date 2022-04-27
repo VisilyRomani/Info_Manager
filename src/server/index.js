@@ -41,10 +41,13 @@ app.get("/auth/jwt", controller.check);
 
 app.post("/auth/login", controller.signin);
 
-app.get("/clients", (res) => {
+app.get("/clients", (req, res) => {
   let SelectClients = "SELECT * FROM clients;";
   db.any(SelectClients).then((data) => {
     res.send(data);
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500)
   });
 });
 
@@ -76,7 +79,7 @@ app.post("/jobdata", (req, res) => {
 app.get("/alljobdata", (req, res) => {
   const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs LEft JOIN clients ON jobs.client_id = clients.client_id'});
   db.manyOrNone(getData).then((data) => {
-    console.log(data)
+    // console.log(data)
     res.send(data);
   }).catch((err) => {
     console.log(err);
@@ -107,7 +110,10 @@ app.put("/finishjob", (req, res) => {
   console.log(updateStatus);
   db.none(updateStatus).then(()=> {
     res.sendStatus(200);
-  })
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500)
+  });
 });
 
 app.post("/newclient", (req, res) => {
@@ -117,10 +123,42 @@ app.post("/newclient", (req, res) => {
   console.log(newClient)
   db.none(newClient).then(()=> {
     res.sendStatus(200);
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500)
   });
-
 });
 
+
+app.put("/newquote", (req, res)=> {
+  console.log(req.body);
+  let data = req.body; 
+  const newClient = new ParameterizedQuery({text: 'INSERT INTO jobs (client_id, book_date, quote, job_description, status) VALUES($1,$2,$3,$4,$5)', values:[data.client, data.bookDate, data.Quote, data.descr, false]}); 
+  db.none(newClient).then(()=> {
+    res.sendStatus(200);
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500)
+  });
+});
+
+app.get("/employee", (req, res) => {
+  const getEmployee = new ParameterizedQuery({text: 'SELECT * FROM employee'});
+  db.any(getEmployee).then((data) => {
+    res.send(data);
+  }).catch((err) => {
+    res.send(err);
+  });
+})
+
+app.get("/timesheet", (req, res) => {
+  const getTimeSheet = new ParameterizedQuery({text: 'SELECT * FROM timesheet'});
+  db.any(getTimeSheet).then((data) => {
+    res.send(data);
+  }).catch((err) => {
+    res.send(err);
+  });
+})
 
 app.listen(PORT);
 

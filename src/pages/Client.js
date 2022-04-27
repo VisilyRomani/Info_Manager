@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {Form,FormGroup, Button, Table, Container} from "react-bootstrap";
+import {Form,FormGroup, Button, Container} from "react-bootstrap";
 import "../css/Client.css"
 import {Formik} from "formik";
-import Select from 'react-select'
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from "react-bootstrap-table2-paginator";
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import * as Yup from 'yup';
 function Client() {
     // TODO: fix unique key prop for table
@@ -11,7 +13,6 @@ function Client() {
 
   const fetchClient = () => {
       axios.get("/clients",{ withCredentials: true }).then((response)=>{
-        console.log(response.data)
         setClient(response.data);
     }).catch((err) => {
       console.error(err);
@@ -39,7 +40,9 @@ function Client() {
     if (isMounted){
       fetchClient();
     }
-      return () => {isMounted = false;}
+      return () => {
+        setClient([]);
+        isMounted = false;}
   },[]);
 
   const validationSchema = Yup.object().shape({
@@ -52,7 +55,28 @@ function Client() {
     .max(100, "*Email must be less than 100 characters"),
     clientSprinkler: Yup.string().required()
   });
-
+  const columns = [
+    {
+      dataField: "client_name",
+      text: "Client Name",
+    },
+    {
+      dataField: "addr",
+      text: "Address"
+    },
+    {
+      dataField: "email",
+      text: "Email",
+    },
+    {
+      dataField: "phone_num",
+      text: "Phone Number"
+    },
+    {
+      dataField: "sprinklers",
+      text: "Sprinklers"
+    },
+  ];
 
   return (
     <div>
@@ -150,7 +174,10 @@ function Client() {
         </Formik>
       </Container>
       <Container>
-    <Table responsive>
+
+      <BootstrapTable keyField='client_id' data={client} columns={ columns } pagination={paginationFactory({ sizePerPage: 5 })} />
+
+    {/* <Table responsive>
       <thead>
         <tr>
           <th key={0}>Name</th>
@@ -171,7 +198,7 @@ function Client() {
               </tr>
             ))}
       </tbody>
-    </Table>
+    </Table> */}
       </Container>
     </div>
   );

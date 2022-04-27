@@ -19,7 +19,6 @@ function Home() {
             return a.sort_int - b.sort_int;
           })
           setJob(preSort);
-          console.log(preSort)
         }
       }).catch((err) => {
         console.error(err);
