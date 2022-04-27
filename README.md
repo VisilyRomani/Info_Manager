@@ -1,7 +1,7 @@
 # Sprouts Command Center
 
 ## Information
-This is a personal project work in progress that consists of internal web tools for client, job, and time manamgent.
+This is a personal project work in progress that consists of internal web tools for client, job, and time manamgent. This project is secured using cookies and Bcrypt encryption.
 
 ## Table of Contents
 - [Information](https://github.com/VisilyRomani/sprouts-control-center/edit/main/README.md)
