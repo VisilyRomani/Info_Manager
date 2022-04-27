@@ -50,7 +50,7 @@
   "proxy": "http://localhost:5000",
   "scripts": {
     "start": "node src/server/index.js",
-    "heroku-postbuild": "npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "heroku-postbuild": "npm install && npm install --only=dev --no-shrinkwrap && npm run build --legacy-peer-deps",
     "dev": "concurrently 'npm run react' 'npm run server",
     "react": "react-scripts start",
     "server": "set \"INLINE_RUNTIME_CHUNK=false\" && nodemon src/server/index.js",
