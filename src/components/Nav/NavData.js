@@ -1,30 +1,30 @@
 import React from "react";
-import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io5";
+import {AiFillBook, AiFillCalendar, AiFillHome} from "react-icons/ai";
+import {IoPeople} from "react-icons/io5";
 import { BsPeopleCircle } from "react-icons/bs";
 export const NavData = [
   {
     title: "Schedule",
     path: "/home",
-    icon: <AiIcons.AiFillHome />,
+    icon: <AiFillHome />,
     cName: "nav-text",
   },
   {
     title: "Calendar",
     path: "/calendar",
-    icon: <AiIcons.AiFillCalendar />,
+    icon: <AiFillCalendar />,
     cName: "nav-text",
   },
   {
     title: "Time Sheet",
     path: "/timesheet",
-    icon: <IoIcons.IoPeople />,
+    icon: <IoPeople />,
     cName: "nav-text",
   },
   {
     title: "Quotes",
     path: "/quotes",
-    icon: <AiIcons.AiFillBook />,
+    icon: <AiFillBook />,
     cName: "nav-text",
   },
   {
