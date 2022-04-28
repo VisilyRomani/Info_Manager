@@ -47,8 +47,8 @@ app.get('/', (req, res) => {
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      scriptSrc:["'script-src'", "'unsafe-inline'", "'self'"],
-      imgSrc: ["'self'"],
+      scriptSrc:["'script-src'", "'self'"],
+      imgSrc: ["'image-src'", "'self'"],
       styleSrc: ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
     }
   })
