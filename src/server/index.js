@@ -43,8 +43,8 @@ app.use((req, res, next) => {
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      scriptSrc:["script-src", 'unsafe-inline', 'self', "https://sprouts-control-center.herokuapp.com/"],
-      imgSrc: ['self'],
+      scriptSrc:["'script-src'", "'unsafe-inline'", "'self'"],
+      imgSrc: ["'self'"],
       styleSrc: ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
     }
   })
