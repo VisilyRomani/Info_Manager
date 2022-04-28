@@ -22,43 +22,45 @@ const corsOptions = {
 };
 const scriptSrcUrls = [];
 const styleSrcUrls = [];
-const contentSecurityPolicy = [
-  "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
-  "style-src 'self' " + styleSrcUrls.join(" "),
-  "img-src 'self' " + styleSrcUrls.join(" "),
-].join(";");
+// const contentSecurityPolicy = [
+//   "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
+//   "style-src 'self' " + styleSrcUrls.join(" "),
+//   "img-src 'self' " + styleSrcUrls.join(" "),
+// ].join(";");
 
-// CSP headers
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", contentSecurityPolicy);
-  next();
-});
+// // CSP headers
+// app.use((req, res, next) => {
+//   res.setHeader("Content-Security-Policy", contentSecurityPolicy);
+//   next();
+// });
 
-app.use((req, res, next) => {
-  // nonce should be base64 encoded
-  res.locals.styleNonce = Buffer.from(uuidv4()).toString('base64')
-  console.log(res.locals.styleNonce)
-  next()
-})
 
-app.get('/', (req, res) => {
-  res.render('index', {styleNonce: res.locals.styleNonce})
-})
+// app.use((req, res, next) => {
+//   // nonce should be base64 encoded
+//   res.locals.styleNonce = Buffer.from(uuidv4()).toString('base64')
+//   console.log(res.locals.styleNonce)
+//   next()
+// })
+
+// app.get('/', (req, res) => {
+//   res.render('index', {styleNonce: res.locals.styleNonce})
+// })
 
 // app.use(
 //   helmet.contentSecurityPolicy({
 //     directives: {
 //       "script-src":["'self'", "https://sprouts-control-center.herokuapp.com"],
 //       "img-src": ["'self'", "https://sprouts-control-center.herokuapp.com"],
-//       "style-src": ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
+//       "style-src": ["'self'"]
 //     }
 //   })
 // )
 
+app.use(helmet.contentSecurityPolicy());
 
 
 // Cors
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
