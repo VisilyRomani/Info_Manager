@@ -22,17 +22,17 @@ const corsOptions = {
 };
 const scriptSrcUrls = [];
 const styleSrcUrls = [];
-// const contentSecurityPolicy = [
-//   "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
-//   "style-src 'self' " + styleSrcUrls.join(" "),
-//   "img-src 'self' " + styleSrcUrls.join(" "),
-// ].join(";");
+const contentSecurityPolicy = [
+  "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
+  "style-src 'self' " + styleSrcUrls.join(" "),
+  "img-src 'self' " + styleSrcUrls.join(" "),
+].join(";");
 
-// // CSP headers
-// app.use((req, res, next) => {
-//   res.setHeader("Content-Security-Policy", contentSecurityPolicy);
-//   next();
-// });
+// CSP headers
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", contentSecurityPolicy);
+  next();
+});
 
 app.use((req, res, next) => {
   // nonce should be base64 encoded
@@ -45,15 +45,15 @@ app.get('/', (req, res) => {
   res.render('index', {styleNonce: res.locals.styleNonce})
 })
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      "script-src":["'self'", "https://sprouts-control-center.herokuapp.com"],
-      "img-src": ["'self'", "https://sprouts-control-center.herokuapp.com"],
-      "style-src": ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
-    }
-  })
-)
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       "script-src":["'self'", "https://sprouts-control-center.herokuapp.com"],
+//       "img-src": ["'self'", "https://sprouts-control-center.herokuapp.com"],
+//       "style-src": ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
+//     }
+//   })
+// )
 
 
 
