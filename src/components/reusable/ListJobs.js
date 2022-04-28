@@ -95,10 +95,6 @@ export const ListJobs = (jobData) => {
               );
         }
       }
-
-
-
-
     return(<div className="jobContainer">
 
         <div className="titleRow">
@@ -107,7 +103,7 @@ export const ListJobs = (jobData) => {
             <div>Status</div>
         </div>
         <NewJobModal/>
-        <DragDropContext nonce='csp-nonce' onDragEnd={onDragEnd}>
+        <DragDropContext nonce="${NONCE}" onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
                 {(provided) => (<ul className="jobs"{...provided.droppableProps} ref={provided.innerRef}>
                         {

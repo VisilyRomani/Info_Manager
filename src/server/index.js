@@ -6,7 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const {db, cs, pgp} = require("./database");
 const helmet = require('helmet');
-const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 const app = express();
 const origins = [
   "https://sprouts-control-center.herokuapp.com",
@@ -36,7 +36,7 @@ const styleSrcUrls = [];
 
 app.use((req, res, next) => {
   // nonce should be base64 encoded
-  res.locals.styleNonce = Buffer.from(uuid()).toString('base64')
+  res.locals.styleNonce = Buffer.from(uuidv4()).toString('base64')
   next()
 })
 
