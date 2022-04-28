@@ -10,11 +10,11 @@ This is a personal project work in progress that consists of internal web tools 
 - [Sample Images](https://github.com/VisilyRomani/sprouts-control-center/blob/main/README.md#images)
 
 ## Technologies
-- React 17.0.2
-- React-Bootstrap 2.2.3
-- Bcrypt 5.0.1
-- Express 4.17.1
-- PostgreSQL 13.6
+- React 
+- React-Bootstrap 
+- Bcrypt 
+- Express 
+- PostgreSQL 
 
 ## Setup
 ```
