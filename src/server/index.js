@@ -37,6 +37,7 @@ const styleSrcUrls = [];
 app.use((req, res, next) => {
   // nonce should be base64 encoded
   res.locals.styleNonce = Buffer.from(uuidv4()).toString('base64')
+  console.log(res.locals.styleNonce)
   next()
 })
 
@@ -53,6 +54,8 @@ app.use(
     }
   })
 )
+
+
 
 // Cors
 app.use(cors(corsOptions));
