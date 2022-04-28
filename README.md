@@ -1,4 +1,4 @@
-# Sprouts Command Center
+# Client and Employee manager
 
 ## Information
 This is a personal project work in progress that consists of internal web tools for client, job, and time manamgent. This project is secured using cookies and Bcrypt encryption.
