@@ -56,7 +56,10 @@ const styleSrcUrls = [];
 //   })
 // )
 
-app.use(helmet.contentSecurityPolicy());
+app.use(function (req, res, next) {
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
+  next()
+})
 
 
 // Cors
