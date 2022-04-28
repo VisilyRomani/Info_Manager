@@ -103,7 +103,7 @@ export const ListJobs = (jobData) => {
             <div>Status</div>
         </div>
         <NewJobModal/>
-        <DragDropContext nonce="${NONCE}" onDragEnd={onDragEnd}>
+        <DragDropContext nonce="{{nonce}}" onDragEnd={onDragEnd}>
             <Droppable droppableId="jobs">
                 {(provided) => (<ul className="jobs"{...provided.droppableProps} ref={provided.innerRef}>
                         {
