@@ -55,7 +55,7 @@ const styleSrcUrls = [];
 //     }
 //   })
 // )
-
+// TODO: setup cors and csp to be secure
 app.use(function (req, res, next) {
   res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
   next()
@@ -94,6 +94,10 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "../../build", "index.html"));
   });
+  app.get("google", function (req, res) {
+    res.sendFile(path.join(__dirname, "../../build", "googleca74e0ae9841e07d.html"));
+  });
+  
 }
 
 
