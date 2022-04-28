@@ -47,8 +47,8 @@ app.get('/', (req, res) => {
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      "script-src":["'self'"],
-      "img-src": ["'self'"],
+      "script-src":["'self'", "https://sprouts-control-center.herokuapp.com"],
+      "img-src": ["'self'", "https://sprouts-control-center.herokuapp.com"],
       "style-src": ["'self'", (req, res) => `'nonce-${res.locals.styleNonce}'`]
     }
   })
