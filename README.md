@@ -1,4 +1,4 @@
-# Client and Employee manager
+# Client and Employee manager *WiP*
 
 ## Information
 This is a personal project work in progress that consists of internal web tools for client, job, and time manamgent. This includes a table view of clients and job quote information for internal management. The ability to add new clients and quotes and a way to mark if the quote has been finished
