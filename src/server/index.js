@@ -40,6 +40,10 @@ app.use((req, res, next) => {
   next()
 })
 
+app.get('/', (req, res) => {
+  res.render('index', {styleNonce: res.locals.styleNonce})
+})
+
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
