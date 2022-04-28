@@ -6,7 +6,7 @@ This is a personal project work in progress that consists of internal web tools 
 ## Table of Contents
 - [Information](https://github.com/VisilyRomani/Info_Manager/blob/main/README.md#information)
 - [Technologies](https://github.com/VisilyRomani/Info_Manager/blob/main/README.md#technologies)
-- [Setup](https://github.com/VisilyRomani/sprouts-control-center/blob/README.md#setup)
+- [Setup](https://github.com/VisilyRomani/sprouts-control-center/blob/main/README.md#setup)
 - [Sample Images](https://github.com/VisilyRomani/sprouts-control-center/blob/main/README.md#images)
 
 ## Technologies
