@@ -74,7 +74,7 @@ app.get("/auth/jwt", controller.check);
 
 app.post("/auth/login", controller.signin);
 
-app.get("/clients", (req, res) => {
+app.post("/getclients", (req, res) => {
   let SelectClients = "SELECT * FROM clients;";
   db.any(SelectClients).then((data) => {
     res.send(data);
@@ -94,10 +94,6 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "../../build", "index.html"));
   });
-  app.get("google", function (req, res) {
-    res.sendFile(path.join(__dirname, "../../build", "googleca74e0ae9841e07d.html"));
-  });
-  
 }
 
 
@@ -114,7 +110,7 @@ app.post("/jobdata", (req, res) => {
 })
 
 app.get("/alljobdata", (req, res) => {
-  const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs LEft JOIN clients ON jobs.client_id = clients.client_id'});
+  const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs LEFT JOIN clients ON jobs.client_id = clients.client_id'});
   db.manyOrNone(getData).then((data) => {
     // console.log(data)
     res.send(data);
@@ -188,14 +184,34 @@ app.get("/employee", (req, res) => {
   });
 })
 
-app.get("/timesheet", (req, res) => {
-  const getTimeSheet = new ParameterizedQuery({text: 'SELECT * FROM timesheet'});
+app.post("/timesheet", (req, res) => {
+  const getTimeSheet = new ParameterizedQuery({text: 'SELECT * FROM timesheet LEFT JOIN employee ON timesheet.employee_id = employee.id'});
   db.any(getTimeSheet).then((data) => {
+    console.log(data);
     res.send(data);
   }).catch((err) => {
     res.send(err);
   });
 })
+
+app.post("/updateTime", (req, res) => {
+  let [employee, pos, time] = req.body;
+  let updateStart = new ParameterizedQuery({text: 'INSERT INTO timesheet(employee_id, start_time) VALUES($1,$2)', values:[employee.value, time]});
+  let updateEnd = new ParameterizedQuery({text: 'UPDATE timesheet SET end_time = $1 where id = $2 VALUES($1, $2)', values:[time, employee.value]});
+  console.log(employee);
+  if(pos == "start"){
+    console.log('start '+ time);
+    db.none(updateStart).then(() => {
+      res.send(200);
+    }).catch((err)=> {
+      res.send(err);
+    });
+  }else if (pos == "end"){
+    console.log('end '+time);
+    console.log(updateEnd)
+    // db.none(updateEnd);
+  }
+});
 
 app.listen(PORT);
 
