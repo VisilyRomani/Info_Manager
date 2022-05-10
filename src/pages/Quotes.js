@@ -9,70 +9,89 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import "../css/Quote.css"
 
-
+// Quote webpage Component
 function Quotes() {
+  // Declare state variables
   const [jobs, setJobs] = useState([]);
   const [clientID, setClientID] = useState([]);
 
+/**
+ * Fetch job data from Express Server
+ */
   const fetchJob = () => {
     axios.get("/alljobdata",{ withCredentials: true }).then((response)=>{
-      response.data.map((item) => {
-        let a = new Date(item.book_date);
-        let month = a.getUTCMonth() + 1; //months from 1-12
-        let day = a.getUTCDate();
-        let year = a.getUTCFullYear();
-        let newdate = year + "/" + month + "/" + day;  
-        item.book_date = newdate;
-        return item.book_date;
-      });
+      // Set response information from GET request to state
       setJobs(response.data);
+
+    // Catch errors 
   }).catch((err) => {
     console.log(err);
   });
   }
 
+  /**
+   * Fetch client information for dropdown
+   */
   const fetchClient = () => {
-    axios.get("/clients",{ withCredentials: true }).then((response)=>{
-      let preData = response.data;
-      let postData = [];
+    axios.post("/getclients",{ withCredentials: true }).then((response)=>{
+      // Format used by react-select
+      let formattedClients = [];
 
-      preData.map((item, index) => {
-        return postData.push({value: item.client_id, label: item.client_name});
+      // Map client data, format into value label and push to formatedClients  
+      response.data.map((item, index) => {
+        return formattedClients.push({value: item.client_id, label: item.client_name});
       })
 
-      setClientID(postData);
+      // Set formatted client information into state
+      setClientID(formattedClients);
+      
+      // Catch errors
   }).catch((err) => {
     console.log(err);
   });
   }
 
+  /**
+   * Submit new quote form information to server
+   * @param {values} values of the quote form from Formik
+   */
+  const submitQuote = (values) => {
+    axios.put("/newquote", values, { withCredentials: true }).catch((e) => {
+      console.log(e);
+    });
+  }
 
+  /**
+   * Sets initial state for the quote component
+   */
   useEffect(() => {
     let isMounted = true;
+    // Check for if the component is mounted, if so fetch job and client information
     if (isMounted){
       fetchJob();
       fetchClient();
     }
       return () => {
+        // When component is unmounted clear state
         setJobs();
         setClientID();
-        isMounted = false;}
+        isMounted = false;
+      }
   },[]);
 
+
+  /**
+   * Validation schema for Yup, used to validate quote form
+   */
   const validationSchema = Yup.object().shape({
     client:  Yup.string().required("*Client is required"),
     descr: Yup.string().min(2, "*Description must have at least 2 characters")
     .required("*Description is required"),
     bookDate: Yup.date().required("*Book Date is required"),
-    Quote:  Yup.number().required("*Quote is required")
+    quote:  Yup.number().required("*Quote is required")
   });
 
-  const submitQuote = (values) => {
-    axios.put("/newquote", values, { withCredentials: true }).then((e) => {
-      console.log(e);
-    })
-  }
-
+  // Column titles for dynamically generated table
   const columns = [
     {
       dataField: "client_name",
@@ -103,17 +122,17 @@ function Quotes() {
             client:'',
             descr:'',
             bookDate:'',
-            Quote:'',
+            quote:'',
             }}
             onSubmit={(values, {setSubmitting, resetForm}) => {
-              // When button submits form and form is in the process of submitting, submit button is disabled
               setSubmitting(true);
               submitQuote(values);
               resetForm();
               setSubmitting(false);
           }}>
-
-        {( {values,
+        {
+          // Callback function for form handling 
+        ( {values,
             errors,
             touched,
             handleChange,
@@ -142,18 +161,17 @@ function Quotes() {
                 placeholder="Enter Book Date" 
                 className={touched.bookDate && errors.bookDate ? "error" : null}/>
                 {touched.bookDate && errors.bookDate ? (<div className="error-message">{errors.bookDate}</div>): null}
-                
             </FormGroup>
               <FormGroup className="form-group">
                 <Form.Label>Quote</Form.Label>
                 <Form.Control 
-                name="Quote" 
+                name="quote" 
                 onChange={handleChange} 
                 onBlur={handleBlur} 
-                value={values.Quote} 
+                value={values.quote} 
                 placeholder="Enter Quote" 
-                className={touched.Quote && errors.Quote ? "error" : null}/>
-                {touched.Quote && errors.Quote ? (<div className="error-message">{errors.Quote}</div>): null}
+                className={touched.quote && errors.quote ? "error" : null}/>
+                {touched.quote && errors.quote ? (<div className="error-message">{errors.quote}</div>): null}
             </FormGroup>
             <Button variant="primary" type="submit" disabled={isSubmitting}>Submit</Button>
           </Form>
@@ -163,7 +181,6 @@ function Quotes() {
       <Container>
         <BootstrapTable keyField='job_id' data={jobs} columns={ columns } pagination={paginationFactory({ sizePerPage: 5 })} />
       </Container>
-      
     </div>
   );
 }

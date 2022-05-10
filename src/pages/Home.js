@@ -4,6 +4,7 @@ import axios from "axios";
 import { ListJobs } from "../components/reusable/ListJobs";
 import 'react-calendar/dist/Calendar.css';
 import '../css/Home.css';
+import { Container } from "react-bootstrap";
 
 function Home() {
   const [value, onChange] = useState(new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()));
@@ -28,7 +29,7 @@ function Home() {
 
 
   return (
-    <div className="container">
+    <Container>
       <div className="calendarContainer">
         <Calendar 
         onChange={onChange}
@@ -40,7 +41,7 @@ function Home() {
       <div className="jobParent">
         <ListJobs jobData={job}/>
       </div>
-    </div>
+    </Container>
   );
 }
 

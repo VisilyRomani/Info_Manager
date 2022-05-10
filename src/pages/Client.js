@@ -12,7 +12,7 @@ function Client() {
   const [client, setClient] = useState([]);
 
   const fetchClient = () => {
-      axios.get("/clients",{ withCredentials: true }).then((response)=>{
+      axios.post("/getclients",{ withCredentials: true }).then((response)=>{
         setClient(response.data);
     }).catch((err) => {
       console.error(err);

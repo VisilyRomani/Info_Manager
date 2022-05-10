@@ -36,3 +36,18 @@
     position: absolute;
     font-size: .8em;
 }
+
+td {
+    /* word-break: break-word;
+     */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+table {
+    overflow: x;
+    word-break: break-word;
+
+}

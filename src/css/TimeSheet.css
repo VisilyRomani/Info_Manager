@@ -1,0 +1,14 @@
+.TimeObject {
+    display: flex;
+    justify-content: space-between;
+}
+
+.employeeSelect {
+    width: 150px;
+}
+
+.newEmp {
+    position: fixed;
+    left: 50%;
+    /* transform: translate(-50%, -50%); */
+}
