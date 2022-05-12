@@ -12,26 +12,13 @@ export const TimeComponent = ({listEmployee, timeData}) => {
     const [endTime, setEndTime] = useState();
     const [employee, setEmployee] = useState({});
 
-  // TODO: FIx error in end part of the update for end time
-  // probabaly server side
-  // actually def server side
-  // cool beans
     useEffect(() => {
-
-        // let preEmpData;
-        // if (tData){
-        //   preEmpData = {value: tData.employee_id, label: tData.first_name + " " + tData.last_name}
-        // }
-
-        // setStartTime(tData.start_time);
-        // setEndTime(tData.end_time);
-        // setEmployee(preEmpData)
         let isMounted = true;
         if(isMounted){
           if (timeData){
             setStartTime(timeData.start_time);
             setEndTime(timeData.end_time);
-            setEmployee({employee, id:timeData.employee_id, first_name:timeData.first_name, last_name:timeData.last_name });
+            setEmployee({id:timeData.employee_id, first_name:timeData.first_name, last_name:timeData.last_name });
           }
           console.log(timeData);
         }
@@ -43,8 +30,15 @@ export const TimeComponent = ({listEmployee, timeData}) => {
     },[]);
   
 
-    const updateInfo = (pos, time) => {
-      axios.post("/updateTime", [employee, pos, time], {withCredentials: true }).then((response) => {
+    const sendStartTime = async (time) => {
+      await axios.post("/starttime", [employee, time], {withCredentials: true }).then((response) => {
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+
+    const sendEndTime = async (time) => {
+      await axios.post("/endtime", [employee, time], {withCredentials: true }).then((response) => {
       }).catch((err) => {
         console.log(err);
       });
@@ -52,26 +46,44 @@ export const TimeComponent = ({listEmployee, timeData}) => {
 
 
     const handleTime = () => {
-        let today = new Date();
-        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let dateTime = date+' '+time;
-        console.log(employee)
-        if(employee != undefined){
-          if (startTime === undefined){
-            setStartTime(dateTime);
-            updateInfo("start", dateTime);
+        let curTime = new Date();
+        if(employee !== undefined){
+          if (startTime == undefined){
+            setStartTime(curTime);
+            sendStartTime(curTime);
+            return
           }
           if (endTime == undefined){
-            setEndTime(dateTime);
-            updateInfo("end", dateTime);
-            console.log(dateTime)
+            setEndTime(curTime);
+            sendEndTime(curTime);
           }
           else{
             setButtonState(false);
           }
         
         }
+    }
+
+    const formatDateTime = (dateData) => {
+      if(dateData){
+        let DateTime = new Date(dateData);
+        let date = DateTime.getFullYear()+'-'+(DateTime.getMonth()+1)+'-'+DateTime.getDate();
+        let time = DateTime.getHours() + ":" + DateTime.getMinutes()
+
+        function tConvert (time) {
+          // Check correct time format and split into components
+          time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+        
+          if (time.length > 1) { // If time format correct
+            time = time.slice (1);  // Remove full string match value
+            time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+            time[0] = +time[0] % 12 || 12; // Adjust hours
+          }
+          return time.join (''); // return adjusted time or original string
+        }
+
+        return date+' '+tConvert(time);
+      }
     }
 
 
@@ -83,8 +95,8 @@ export const TimeComponent = ({listEmployee, timeData}) => {
             ):(
               <Select options={listEmployee} onChange= {(options) => {setEmployee(options)}} className="employeeSelect"/>
             )}
-            <div>Start: {startTime}</div>
-            <div>End: {endTime}</div>
+            <div>Start: {formatDateTime(startTime)}</div>
+            <div>End: {formatDateTime(endTime)}</div>
             <Button disabled={buttonState} onClick={handleTime} >Start/End</Button>
         </div>
     </Container>

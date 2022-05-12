@@ -12,21 +12,24 @@ function Home() {
 
   useEffect(() => {
     let isMounted = true;
-      axios.post("/jobdata",{date:value},{ withCredentials: true }).then((response)=>{
-        if(isMounted){
-          // sort data from database based on index order
-          let preSort = [...response.data];
-          preSort.sort(function (a,b){
-            return a.sort_int - b.sort_int;
-          })
-          setJob(preSort);
-        }
-      }).catch((err) => {
-        console.error(err);
-      });
+    if(isMounted){
+      getJobs();
+    }
       return () => {isMounted = false;}
   },[value]);
 
+  const getJobs = async () => {
+    await axios.post("/jobdata",{date:value},{ withCredentials: true }).then((response)=>{
+        // sort data from database based on index order
+        let preSort = [...response.data];
+        preSort.sort(function (a,b){
+          return a.sort_int - b.sort_int;
+        })
+        setJob(preSort);
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
 
   return (
     <Container>

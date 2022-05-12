@@ -13,8 +13,8 @@ function TimeSheet() {
   // list of employee
   const [employeeList, setEmployeeList] = useState([]);
 
-  const fetchEmployee = () => {
-    axios.get("/employee",{ withCredentials: true }).then((response)=>{
+  const fetchEmployee = async () => {
+    await axios.get("/employee",{ withCredentials: true }).then((response)=>{
       let preData = response.data;
       let postData = [];
       preData.map((item, index) => {
@@ -26,8 +26,9 @@ function TimeSheet() {
   });
   }
 
-  const fetchTimeSheet = () => {
-    axios.post("/timesheet",{ withCredentials: true }).then((response)=>{
+  const fetchTimeSheet = async () => {
+    let curDate = new Date();
+    await axios.post("/timesheet",[curDate],{ withCredentials: true }).then((response)=>{
       setTimeSheet(response.data)
   }).catch((err) => {
     console.log(err);
@@ -53,7 +54,9 @@ function TimeSheet() {
       <TimeComponent  listEmployee={employeeList} />
       {(timeSheet) ? (
         timeSheet.map((value, index) => {
-              if(value){
+          let infoDate = new Date(value.start_time)
+          let curDate = new Date()
+              if(infoDate.getDay() == curDate.getDay()){
                 return <TimeComponent listEmployee={employeeList} timeData={value} />
               }
       })): (<></>)}

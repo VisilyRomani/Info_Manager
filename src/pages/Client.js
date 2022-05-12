@@ -11,16 +11,16 @@ function Client() {
     // TODO: fix unique key prop for table
   const [client, setClient] = useState([]);
 
-  const fetchClient = () => {
-      axios.post("/getclients",{ withCredentials: true }).then((response)=>{
+  const fetchClient = async () => {
+    await axios.post("/getclients",{ withCredentials: true }).then((response)=>{
         setClient(response.data);
     }).catch((err) => {
       console.error(err);
     });
   }
 
-  const addClient = (client, values) => {
-    axios.post("/newclient",{data:values},{ withCredentials: true }).then((response)=>{
+  const addClient = async (client, values) => {
+    await axios.post("/newclient",{data:values},{ withCredentials: true }).then((response)=>{
       console.log("success")
       let newList = client;
       let newItem = {client_name:values.clientName,

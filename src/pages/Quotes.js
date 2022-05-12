@@ -18,8 +18,8 @@ function Quotes() {
 /**
  * Fetch job data from Express Server
  */
-  const fetchJob = () => {
-    axios.get("/alljobdata",{ withCredentials: true }).then((response)=>{
+  const fetchJob = async () => {
+    await axios.get("/alljobdata",{ withCredentials: true }).then((response)=>{
       // Set response information from GET request to state
       setJobs(response.data);
 
@@ -32,8 +32,8 @@ function Quotes() {
   /**
    * Fetch client information for dropdown
    */
-  const fetchClient = () => {
-    axios.post("/getclients",{ withCredentials: true }).then((response)=>{
+  const fetchClient = async () => {
+    await axios.post("/getclients",{ withCredentials: true }).then((response)=>{
       // Format used by react-select
       let formattedClients = [];
 
@@ -55,8 +55,8 @@ function Quotes() {
    * Submit new quote form information to server
    * @param {values} values of the quote form from Formik
    */
-  const submitQuote = (values) => {
-    axios.put("/newquote", values, { withCredentials: true }).catch((e) => {
+  const submitQuote = async (values) => {
+    await axios.put("/newquote", values, { withCredentials: true }).catch((e) => {
       console.log(e);
     });
   }
