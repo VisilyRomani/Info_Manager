@@ -11,26 +11,30 @@ export const TimeComponent = ({listEmployee, timeData}) => {
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
     const [employee, setEmployee] = useState({});
+    const [jobId, setJobId] = useState();
 
     useEffect(() => {
         let isMounted = true;
         if(isMounted){
           if (timeData){
+            console.log(timeData)
             setStartTime(timeData.start_time);
             setEndTime(timeData.end_time);
             setEmployee({id:timeData.employee_id, first_name:timeData.first_name, last_name:timeData.last_name });
+            setJobId(timeData.timesheet_id);
           }
-          console.log(timeData);
         }
         return () => {
           setEmployee();
           setEndTime();
           setStartTime()
+          setJobId();
           isMounted = false;}
-    },[]);
+    },[timeData]);
   
 
     const sendStartTime = async (time) => {
+      console.log(employee)
       await axios.post("/starttime", [employee, time], {withCredentials: true }).then((response) => {
       }).catch((err) => {
         console.log(err);
@@ -38,7 +42,8 @@ export const TimeComponent = ({listEmployee, timeData}) => {
     }
 
     const sendEndTime = async (time) => {
-      await axios.post("/endtime", [employee, time], {withCredentials: true }).then((response) => {
+      console.log(jobId);
+      await axios.post("/endtime", [employee, time, jobId], {withCredentials: true }).then((response) => {
       }).catch((err) => {
         console.log(err);
       });
@@ -66,23 +71,27 @@ export const TimeComponent = ({listEmployee, timeData}) => {
 
     const formatDateTime = (dateData) => {
       if(dateData){
+
         let DateTime = new Date(dateData);
-        let date = DateTime.getFullYear()+'-'+(DateTime.getMonth()+1)+'-'+DateTime.getDate();
-        let time = DateTime.getHours() + ":" + DateTime.getMinutes()
+        return DateTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+        // let date = DateTime.getFullYear()+'-'+(DateTime.getMonth()+1)+'-'+DateTime.getDate();
+        // let time = DateTime.getHours() + ":" + DateTime.getMinutes()
+        // console.log(DateTime)
 
-        function tConvert (time) {
-          // Check correct time format and split into components
-          time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+        // function tConvert (time) {
+        //   // Check correct time format and split into components
+        //   time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
         
-          if (time.length > 1) { // If time format correct
-            time = time.slice (1);  // Remove full string match value
-            time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
-            time[0] = +time[0] % 12 || 12; // Adjust hours
-          }
-          return time.join (''); // return adjusted time or original string
-        }
+        //   if (time.length > 1) { // If time format correct
+        //     time = time.slice (1);  // Remove full string match value
+        //     time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+        //     time[0] = +time[0] % 12 || 12; // Adjust hours
+        //     console.log(time)
+        //   }
+        //   return time.join (''); // return adjusted time or original string
+        // }
 
-        return date+' '+tConvert(time);
+        // return date+' '+tConvert(time);
       }
     }
 

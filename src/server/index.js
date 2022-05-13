@@ -186,7 +186,7 @@ app.get("/employee", (req, res) => {
 
 app.post("/timesheet", (req, res) => {
   let currentDate = req.body;
-  const getTimeSheet = new ParameterizedQuery({text: 'SELECT * FROM timesheet LEFT JOIN employee ON timesheet.employee_id = employee.id'});
+  const getTimeSheet = new ParameterizedQuery({text: 'SELECT * FROM timesheet LEFT JOIN employee ON timesheet.employee_id = employee.employee_id'});
   db.any(getTimeSheet).then((data) => {
     // console.log(data);
     res.send(data);
@@ -197,6 +197,7 @@ app.post("/timesheet", (req, res) => {
 
 app.post("/starttime", (req, res) => {
   let [employee, time] = req.body;
+  console.log(employee)
   let updateStart = new ParameterizedQuery({text: 'INSERT INTO timesheet(employee_id, start_time) VALUES($1,$2)', values:[employee.value, time]});
   db.none(updateStart).then(() => {
     res.sendStatus(200);
@@ -207,11 +208,13 @@ app.post("/starttime", (req, res) => {
 });
 
 app.post("/endtime", (req, res) => {
-  let [employee, time] = req.body;
-  let updateEnd = new ParameterizedQuery({text: 'UPDATE timesheet SET end_time = $1 WHERE employee_id = $2 AND end_time IS NULL ', values:[time, employee.id]});
-  console.log(employee);
+  let [employee, time, jobId] = req.body;
+  console.log(req.body);
+
+  let updateEnd = new ParameterizedQuery({text: 'UPDATE timesheet SET end_time = $1 WHERE employee_id = $2 AND timesheet_id = $3', values:[time, employee.id, jobId ]});
+  // console.log(employee);
   // console.log('end '+time);
-  console.log(updateEnd)
+  // console.log(updateEnd)
   db.none(updateEnd).then(() => {
     res.sendStatus(200);
   }).catch((err) => {

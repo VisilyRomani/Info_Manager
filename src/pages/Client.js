@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {Form,FormGroup, Button, Container} from "react-bootstrap";
 import "../css/Client.css"
 import {Formik} from "formik";
@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 function Client() {
     // TODO: fix unique key prop for table
   const [client, setClient] = useState([]);
+  const mountedRef = useRef(true);
 
   const fetchClient = async () => {
     await axios.post("/getclients",{ withCredentials: true }).then((response)=>{
@@ -36,13 +37,11 @@ function Client() {
   }
 
   useEffect(() => {
-    let isMounted = true;
-    if (isMounted){
       fetchClient();
-    }
       return () => {
         setClient([]);
-        isMounted = false;}
+        mountedRef.current = false
+      }
   },[]);
 
   const validationSchema = Yup.object().shape({

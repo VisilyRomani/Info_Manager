@@ -3,62 +3,63 @@ import {Button, } from "react-bootstrap";
 import { TimeComponent } from "../components/reusable/TimeComponent";
 import axios from "axios";
 import "../css/TimeSheet.css"
-// TODO: create line that has drop down for employee then start and end time. 
-  // once start is pressed then send current time to database.
-  // once end is pressed send end time to database
-  // below show a button to add a new employee
-//  Below  show a input date then a table for finished information.
+
 function TimeSheet() {
   const [timeSheet, setTimeSheet] = useState([]);
   // list of employee
   const [employeeList, setEmployeeList] = useState([]);
 
-  const fetchEmployee = async () => {
-    await axios.get("/employee",{ withCredentials: true }).then((response)=>{
-      let preData = response.data;
-      let postData = [];
-      preData.map((item, index) => {
-        return postData.push({value: item.id, label:item.first_name + " " +item.last_name });
-      })
-      setEmployeeList(postData);
-  }).catch((err) => {
-    console.log(err);
-  });
-  }
-
-  const fetchTimeSheet = async () => {
-    let curDate = new Date();
-    await axios.post("/timesheet",[curDate],{ withCredentials: true }).then((response)=>{
-      setTimeSheet(response.data)
-  }).catch((err) => {
-    console.log(err);
-  });
-  }
 
   useEffect(() => {
-    let isMounted = true;
-    if (isMounted){
-      fetchEmployee();
-      fetchTimeSheet();
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
+    const sortData = (data) => {
+      let postData = []
+      data.map((item, index) => {
+        postData.push({value: item.employee_id, label:item.first_name + " " +item.last_name });
+      });
+      return postData;
     }
+
+    const axiosCalls = async () => {
+      let requestOne = axios.post("/timesheet", {cancelToken:source.token},{ withCredentials: true });
+      let requestTwo = axios.get("/employee", {cancelToken:source.token}, { withCredentials: true });
+
+      axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+        const responseOne = responses[0].data;
+        const responseTwo = responses[1].data;
+        setEmployeeList(sortData(responseTwo));
+        setTimeSheet(responseOne);
+      })).catch((err) => {
+        if (axios.isCancel(err)){
+          console.log("aborted2");
+        }else{
+          console.error(err);
+        }
+      })
+    }
+
+    axiosCalls();
       return () => {
-        setEmployeeList([]);
-        setTimeSheet([]);
-        isMounted = false;}
+        source.cancel();
+      }
   },[]);
 
 
   return (
     <div>
       <h1>Time Sheet</h1>
-      <TimeComponent  listEmployee={employeeList} />
+      {/* 
+      TODO: Create dedicated input component
+        Create a new Time Component that is only entering data and have it callback to this to update the useEffect 
+        to add to the list of unfinished jobs 
+      TODO: Create a table that only shows the completed sheet values and sum the ones between two dates  
+      */}
+      <TimeComponent  listEmployee={employeeList}/>
       {(timeSheet) ? (
         timeSheet.map((value, index) => {
-          let infoDate = new Date(value.start_time)
-          let curDate = new Date()
-              if(infoDate.getDay() == curDate.getDay()){
-                return <TimeComponent listEmployee={employeeList} timeData={value} />
-              }
+          return <TimeComponent listEmployee={employeeList} timeData={value} key={"TC-" +index} />
       })): (<></>)}
       <Button className="newEmp">
           Track New Time
