@@ -4,9 +4,9 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const {db, cs, pgp} = require("./database");
-const helmet = require('helmet');
-const { v4: uuidv4 } = require('uuid');
+const { db, cs, pgp } = require("./database");
+const helmet = require("helmet");
+const { v4: uuidv4 } = require("uuid");
 const app = express();
 const origins = [
   "https://sprouts-control-center.herokuapp.com",
@@ -34,7 +34,6 @@ const styleSrcUrls = [];
 //   next();
 // });
 
-
 // app.use((req, res, next) => {
 //   // nonce should be base64 encoded
 //   res.locals.styleNonce = Buffer.from(uuidv4()).toString('base64')
@@ -57,18 +56,14 @@ const styleSrcUrls = [];
 // )
 // TODO: setup cors and csp to be secure
 app.use(function (req, res, next) {
-  res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
-  next()
-})
-
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  next();
+});
 
 // Cors
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
-
-
-
 
 app.get("/auth/jwt", controller.check);
 
@@ -76,12 +71,14 @@ app.post("/auth/login", controller.signin);
 
 app.post("/getclients", (req, res) => {
   let SelectClients = "SELECT * FROM clients;";
-  db.any(SelectClients).then((data) => {
-    res.send(data);
-  }).catch((error) => {
-    console.log(error);
-    res.sendStatus(500)
-  });
+  db.any(SelectClients)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 // app.post('/auth/register', controller.reg);
@@ -96,130 +93,177 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-
 app.post("/jobdata", (req, res) => {
   let reqData = req.body.date;
-  const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date = $1', values:reqData});
-  if(reqData != null){
-    db.any(getData).then((data)=> {
+  const getData = new ParameterizedQuery({
+    text: "SELECT * FROM jobs FULL OUTER JOIN clients ON clients.client_id = jobs.client_id WHERE book_date = $1",
+    values: reqData,
+  });
+  if (reqData != null) {
+    db.any(getData)
+      .then((data) => {
         res.send(data);
-    }).catch((err) => {
-      console.log(err)
-    })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-})
+});
 
 app.get("/alljobdata", (req, res) => {
-  const getData = new ParameterizedQuery({text: 'SELECT * FROM jobs LEFT JOIN clients ON jobs.client_id = clients.client_id'});
-  db.manyOrNone(getData).then((data) => {
-    // console.log(data)
-    res.send(data);
-  }).catch((err) => {
-    console.log(err);
-  })
-
-})
-
+  const getData = new ParameterizedQuery({
+    text: "SELECT * FROM jobs LEFT JOIN clients ON jobs.client_id = clients.client_id",
+  });
+  db.manyOrNone(getData)
+    .then((data) => {
+      // console.log(data)
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 // updates database on update
 app.put("/sortupdate", (req, res) => {
   let jobList = req.body.job_order;
-  if (jobList.length != 0){
-    const query = pgp.helpers.update(jobList, cs) + ' WHERE v.job_id = t.job_id' ;
-    db.none(query).then(()=> {
-      res.sendStatus(200);
-    }).catch((err) => {
-      res.send(err);
-    });
-  }else{
+  if (jobList.length != 0) {
+    const query =
+      pgp.helpers.update(jobList, cs) + " WHERE v.job_id = t.job_id";
+    db.none(query)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  } else {
     res.sendStatus(300);
   }
-})
+});
 
 //TODO: ErrorChecking
 app.put("/finishjob", (req, res) => {
-  let item = req.body.item
-  const updateStatus = new ParameterizedQuery({text: 'UPDATE Jobs set status = $1 WHERE job_id = $2', values:[item.status ,item.job_id]});
-  console.log(updateStatus);
-  db.none(updateStatus).then(()=> {
-    res.sendStatus(200);
-  }).catch((error) => {
-    console.log(error);
-    res.sendStatus(500)
+  let item = req.body.item;
+  const updateStatus = new ParameterizedQuery({
+    text: "UPDATE Jobs set status = $1 WHERE job_id = $2",
+    values: [item.status, item.job_id],
   });
+  console.log(updateStatus);
+  db.none(updateStatus)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 app.post("/newclient", (req, res) => {
   let data = req.body.data;
-  
-  const newClient = new ParameterizedQuery({text: 'INSERT INTO clients (client_name, addr, phone_num, email, sprinklers, date_added) VALUES($1,$2,$3,$4,$5,$6)', values:[data.clientName, data.clientAddress, data.clientNumber, data.clientEmail, data.clientSprinkler, new Date]}); 
-  console.log(newClient)
-  db.none(newClient).then(()=> {
-    res.sendStatus(200);
-  }).catch((error) => {
-    console.log(error);
-    res.sendStatus(500)
+
+  const newClient = new ParameterizedQuery({
+    text: "INSERT INTO clients (client_name, addr, phone_num, email, sprinklers, date_added) VALUES($1,$2,$3,$4,$5,$6)",
+    values: [
+      data.clientName,
+      data.clientAddress,
+      data.clientNumber,
+      data.clientEmail,
+      data.clientSprinkler,
+      new Date(),
+    ],
   });
+  console.log(newClient);
+  db.none(newClient)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
-
-app.put("/newquote", (req, res)=> {
+app.put("/newquote", (req, res) => {
   console.log(req.body);
-  let data = req.body; 
-  const newClient = new ParameterizedQuery({text: 'INSERT INTO jobs (client_id, book_date, quote, job_description, status) VALUES($1,$2,$3,$4,$5)', values:[data.client, data.bookDate, data.Quote, data.descr, false]}); 
-  db.none(newClient).then(()=> {
-    res.sendStatus(200);
-  }).catch((error) => {
-    console.log(error);
-    res.sendStatus(500)
+  let data = req.body;
+  const newClient = new ParameterizedQuery({
+    text: "INSERT INTO jobs (client_id, book_date, quote, job_description, status) VALUES($1,$2,$3,$4,$5)",
+    values: [data.client, data.bookDate, data.Quote, data.descr, false],
   });
+  db.none(newClient)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 app.get("/employee", (req, res) => {
-  const getEmployee = new ParameterizedQuery({text: 'SELECT * FROM employee'});
-  db.any(getEmployee).then((data) => {
-    res.send(data);
-  }).catch((err) => {
-    res.send(err);
+  const getEmployee = new ParameterizedQuery({
+    text: "SELECT * FROM employee",
   });
-})
+  db.any(getEmployee)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
 
 app.post("/timesheet", (req, res) => {
   let currentDate = req.body;
-  const getTimeSheet = new ParameterizedQuery({text: 'SELECT * FROM timesheet LEFT JOIN employee ON timesheet.employee_id = employee.employee_id'});
-  db.any(getTimeSheet).then((data) => {
-    // console.log(data);
-    res.send(data);
-  }).catch((err) => {
-    res.send(err);
+  const getTimeSheet = new ParameterizedQuery({
+    text: "SELECT * FROM timesheet LEFT JOIN employee ON timesheet.employee_id = employee.employee_id",
   });
-})
+  db.any(getTimeSheet)
+    .then((data) => {
+      // console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
 
 app.post("/starttime", (req, res) => {
   let [employee, time] = req.body;
-  console.log(employee)
-  let updateStart = new ParameterizedQuery({text: 'INSERT INTO timesheet(employee_id, start_time) VALUES($1,$2)', values:[employee.value, time]});
-  db.none(updateStart).then(() => {
-    res.sendStatus(200);
-  }).catch((err)=> {
-    res.send(err);
+  console.log(employee);
+  let updateStart = new ParameterizedQuery({
+    text: "INSERT INTO timesheet(employee_id, start_time) VALUES($1,$2)",
+    values: [employee.value, time],
   });
-
+  db.none(updateStart)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 app.post("/endtime", (req, res) => {
   let [employee, time, jobId] = req.body;
   console.log(req.body);
 
-  let updateEnd = new ParameterizedQuery({text: 'UPDATE timesheet SET end_time = $1 WHERE employee_id = $2 AND timesheet_id = $3', values:[time, employee.id, jobId ]});
+  let updateEnd = new ParameterizedQuery({
+    text: "UPDATE timesheet SET end_time = $1 WHERE employee_id = $2 AND timesheet_id = $3",
+    values: [time, employee.id, jobId],
+  });
   // console.log(employee);
   // console.log('end '+time);
   // console.log(updateEnd)
-  db.none(updateEnd).then(() => {
-    res.sendStatus(200);
-  }).catch((err) => {
-    res.send(err)
-  });
+  db.none(updateEnd)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 app.listen(PORT);

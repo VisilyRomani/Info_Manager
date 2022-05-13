@@ -28,7 +28,8 @@ exports.check = (req, res) => {
 exports.signin = (req, res) => {
   let { username, password } = req.body;
 
-  db.db.query("SELECT * FROM users WHERE username = '" + username + "'")
+  db.db
+    .query("SELECT * FROM users WHERE username = '" + username + "'")
     .then((data) => {
       if (!data) {
         res.status(404).send({ message: "user not found" });
