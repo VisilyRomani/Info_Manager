@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { TimeComponent } from "../components/reusable/TimeComponent";
+import { TimeComponentAbstract } from "../components/reusable/TimeComponent";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { NewTime } from "../components/reusable/NewTime";
 import axios from "axios";
 import "../css/TimeSheet.css";
@@ -98,32 +98,35 @@ function TimeSheet() {
   };
 
   return (
-    <div>
+    <div className="fade-body">
       <h1>Time Sheet</h1>
       <NewTime listEmployee={employeeList} timesheetCallback={updateDate} />
-      <div className="ts-container">
-        {timeSheet ? (
-          timeSheet.map((value, index) => {
-            if (
-              new Date(value.start_time).toDateString() ===
-              new Date().toDateString()
-            ) {
-              return (
-                <TimeComponent
-                  timeData={value}
-                  key={"TC-" + index}
-                  timesheetCallback={updateDate}
-                  className="asdf"
-                />
-              );
-            }
-          })
-        ) : (
-          <></>
-        )}
-      </div>
+      <TimeComponentAbstract
+        timesheet={timeSheet}
+        timesheetCallback={updateDate}
+        timesheetDate={new Date().toDateString()} // put date here when infinite loading
+      />
     </div>
   );
 }
 
+// {timeSheet ? (
+//   timeSheet.map((value, index) => {
+//     if (
+//       new Date(value.start_time).toDateString() ===
+//       new Date().toDateString()
+//     ) {
+//       return (
+//         <TimeComponent
+//           timeData={value}
+//           key={"TC-" + index}
+//           timesheetCallback={updateDate}
+//           className="asdf"
+//         />
+//       );
+//     }
+//   })
+// ) : (
+//   <></>
+// )}
 export default TimeSheet;

@@ -53,7 +53,7 @@ function Home() {
   }, [value]);
 
   return (
-    <Container>
+    <Container className="fade-body">
       <div className="calendarContainer">
         <Calendar
           onChange={onChange}

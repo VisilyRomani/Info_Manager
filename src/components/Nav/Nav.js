@@ -35,9 +35,9 @@ function Nav(props) {
     <div>
       <IconContext.Provider value={{ color: "#fff" }}>
         <div className="navbar">
-          <Link to="#" className="menu-bar">
+          <a className="menu-bar">
             <FaIcons.FaBars onClick={showSidebar} />
-          </Link>
+          </a>
           <button className="logoutbtn" onClick={Logout}>
             logout
           </button>
@@ -50,7 +50,7 @@ function Nav(props) {
             {NavData.map((item, index) => {
               return (
                 <li key={index} className={item.cName}>
-                  <Link to={item.path} >
+                  <Link to={item.path}>
                     {item.icon}
                     <span>{item.title}</span>
                   </Link>

@@ -88,7 +88,7 @@ function Client() {
   ];
 
   return (
-    <div>
+    <div className="fade-body">
       <h1>Client</h1>
       <Container>
         <Formik

@@ -76,13 +76,8 @@ body {
 
 }
 
-.clientName {}
-
-.addr {}
-
 .addr a {
   text-decoration: none;
   color: black;
 }
 
-.status {}

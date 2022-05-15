@@ -22,7 +22,6 @@ function App() {
           <PrivateRoute exact path="/quotes" component={Quotes} />
           <PrivateRoute exact path="/timesheet" component={TimeSheet} />
           <PrivateRoute exact path="/clients" component={Client} />
-
           <Route component={Page404} />
         </Switch>
       </Router>

@@ -124,7 +124,7 @@ function Quotes() {
   ];
 
   return (
-    <div>
+    <div className="fade-body">
       <h1>Quotes</h1>
       <Container>
         <Formik
