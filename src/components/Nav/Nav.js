@@ -35,9 +35,9 @@ function Nav(props) {
     <div>
       <IconContext.Provider value={{ color: "#fff" }}>
         <div className="navbar">
-          <a className="menu-bar">
+          <div className="menu-bar">
             <FaIcons.FaBars onClick={showSidebar} />
-          </a>
+          </div>
           <button className="logoutbtn" onClick={Logout}>
             logout
           </button>

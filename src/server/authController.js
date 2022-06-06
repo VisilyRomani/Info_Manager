@@ -1,16 +1,17 @@
 const db = require("./database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { ParameterizedQuery } = require("pg-promise");
 
-exports.reg = (req, res) => {
-  // console.log(req.body)
-  bcrypt.hash(req.body.password, 10, (err, hash) => {
-    db.none(
-      "INSERT INTO users(username, password) VALUES(${username},${password})",
-      { username: req.body.username, password: hash }
-    );
-  });
-};
+// exports.reg = (req, res) => {
+//   // console.log(req.body)
+//   bcrypt.hash(req.body.password, 10, (err, hash) => {
+//     db.db.none(
+//       "INSERT INTO users(username, password) VALUES(${username},${password})",
+//       { username: req.body.username, password: hash }
+//     );
+//   });
+// };
 
 exports.check = (req, res) => {
   try {
@@ -27,9 +28,13 @@ exports.check = (req, res) => {
 
 exports.signin = (req, res) => {
   let { username, password } = req.body;
+  let verifyQuery = new ParameterizedQuery({
+    text: "SELECT * FROM users WHERE username = $1",
+    values: username,
+  });
 
   db.db
-    .query("SELECT * FROM users WHERE username = '" + username + "'")
+    .query(verifyQuery)
     .then((data) => {
       if (!data) {
         res.status(404).send({ message: "user not found" });

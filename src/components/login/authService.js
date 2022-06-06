@@ -14,11 +14,11 @@ function login(username, password) {
 }
 
 // const register = () => {
-//     return axios.post(API_URL + '/register', {
-//         username:'sprouts-admin',
-//         password:'sprouts8970',
-//     });
-// }
+//   return axios.post("/auth/register", {
+//     username: "sprouts-admin",
+//     password: "sprouts8970",
+//   });
+// };
 
 const authService = {
   login,

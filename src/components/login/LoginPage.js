@@ -77,7 +77,6 @@ const LoginPage = (props) => {
           className="loginInput "
           onChange={onChangeInput}
         ></input>
-
         <input type="submit" value="Submit" className="submitForm " />
       </form>
     </div>

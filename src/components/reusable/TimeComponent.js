@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Button, Container, Card } from "react-bootstrap";
 
 export const TimeComponentAbstract = ({
@@ -13,11 +13,10 @@ export const TimeComponentAbstract = ({
     const [employee, setEmployee] = useState({});
     const [jobId, setJobId] = useState();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       let isMounted = true;
       if (isMounted && timeData) {
         setStartTime(timeData.start_time);
-        console.log(timeData.end_time);
         setEndTime(timeData.end_time);
         setEmployee({
           id: timeData.employee_id,
@@ -36,7 +35,7 @@ export const TimeComponentAbstract = ({
     }, [timeData]);
 
     const sendEndTime = async (time) => {
-      console.log(jobId);
+      // console.log(jobId);
       await axios
         .post("/endtime", [employee, time, jobId], { withCredentials: true })
         .then((response) => {})
@@ -47,8 +46,8 @@ export const TimeComponentAbstract = ({
 
     const handleTime = () => {
       let curTime = new Date();
-      console.log(endTime);
-      if (typeof employee !== undefined && endTime === null) {
+      // console.log(endTime);
+      if (employee && endTime === null) {
         sendEndTime(curTime);
         timesheetCallback();
       }
@@ -98,30 +97,34 @@ export const TimeComponentAbstract = ({
     );
   };
 
+  // const OptiTimeComponent = React.memo(TimeComponent);
+
   return (
     <div>
-      <h3>{timesheetDate}</h3>
-      <div className="ts-container">
-        {timesheet ? (
-          timesheet.map((value, index) => {
-            if (
-              new Date(value.start_time).toDateString() ===
-              new Date().toDateString()
-            ) {
-              return (
-                <TimeComponent
-                  timeData={value}
-                  key={"TC-" + index}
-                  timesheetCallback={timesheetCallback}
-                  className="asdf"
-                />
-              );
-            }
-          })
-        ) : (
-          <></>
-        )}
-      </div>
+      {timesheet ? (
+        timesheet.map((value, index) => {
+          console.log(value);
+          return (
+            <div key={"p-k" + value.date}>
+              <div className="ts-title-date">{value.date}</div>
+              <div className="ts-container">
+                {value.data.map((data) => {
+                  return (
+                    <TimeComponent
+                      timeData={data}
+                      key={"TC-" + data.timesheet_id}
+                      timesheetCallback={timesheetCallback}
+                      className="asdf"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

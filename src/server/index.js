@@ -1,12 +1,12 @@
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 const express = require("express");
+const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { db, cs, pgp } = require("./database");
-const helmet = require("helmet");
-const { v4: uuidv4 } = require("uuid");
+const { limit } = require("express-limit");
 const app = express();
 const origins = [
   "https://sprouts-control-center.herokuapp.com",
@@ -20,8 +20,8 @@ const corsOptions = {
   optionsSuccessStatus: 200,
   credentials: true,
 };
-const scriptSrcUrls = [];
-const styleSrcUrls = [];
+// const scriptSrcUrls = [];
+// const styleSrcUrls = [];
 // const contentSecurityPolicy = [
 //   "script-src 'unsafe-inline' 'self' " + scriptSrcUrls.join(" "),
 //   "style-src 'self' " + styleSrcUrls.join(" "),
@@ -81,16 +81,23 @@ app.post("/getclients", (req, res) => {
     });
 });
 
-// app.post('/auth/register', controller.reg);
+// app.post("/auth/register", controller.reg);
 
 if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets
   app.use(express.static(path.join(__dirname, "../../build")));
 
   // Express serve up index.html file if it doesn't recognize route
-  app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "../../build", "index.html"));
-  });
+  app.get(
+    "*",
+    limit({
+      max: 100,
+      period: 60 * 1000,
+    }),
+    function (_req, res) {
+      res.sendFile(path.join(__dirname, "../../build", "index.html"));
+    }
+  );
 }
 
 app.post("/jobdata", (req, res) => {
@@ -127,7 +134,7 @@ app.get("/alljobdata", (req, res) => {
 // updates database on update
 app.put("/sortupdate", (req, res) => {
   let jobList = req.body.job_order;
-  if (jobList.length != 0) {
+  if (!!jobList.length) {
     const query =
       pgp.helpers.update(jobList, cs) + " WHERE v.job_id = t.job_id";
     db.none(query)
@@ -135,7 +142,8 @@ app.put("/sortupdate", (req, res) => {
         res.sendStatus(200);
       })
       .catch((err) => {
-        res.send(err);
+        console.log(err);
+        res.send(400);
       });
   } else {
     res.sendStatus(300);
@@ -162,7 +170,6 @@ app.put("/finishjob", (req, res) => {
 
 app.post("/newclient", (req, res) => {
   let data = req.body.data;
-
   const newClient = new ParameterizedQuery({
     text: "INSERT INTO clients (client_name, addr, phone_num, email, sprinklers, date_added) VALUES($1,$2,$3,$4,$5,$6)",
     values: [
@@ -210,23 +217,28 @@ app.get("/employee", (req, res) => {
     .then((data) => {
       res.send(data);
     })
-    .catch((err) => {
-      res.send(err);
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
 });
 
 app.post("/timesheet", (req, res) => {
-  let currentDate = req.body;
+  let startDate = new Date(req.body.startDate);
+  let endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() - 7);
+
   const getTimeSheet = new ParameterizedQuery({
-    text: "SELECT * FROM timesheet LEFT JOIN employee ON timesheet.employee_id = employee.employee_id",
+    text: "SELECT * FROM timesheet LEFT JOIN employee USING (employee_id) WHERE start_time BETWEEN SYMMETRIC $1 AND $2",
+    values: [endDate, startDate],
   });
   db.any(getTimeSheet)
     .then((data) => {
-      // console.log(data);
       res.send(data);
     })
-    .catch((err) => {
-      res.send(err);
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
 });
 
@@ -241,8 +253,9 @@ app.post("/starttime", (req, res) => {
     .then(() => {
       res.sendStatus(200);
     })
-    .catch((err) => {
-      res.send(err);
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
 });
 
@@ -254,15 +267,14 @@ app.post("/endtime", (req, res) => {
     text: "UPDATE timesheet SET end_time = $1 WHERE employee_id = $2 AND timesheet_id = $3",
     values: [time, employee.id, jobId],
   });
-  // console.log(employee);
-  // console.log('end '+time);
-  // console.log(updateEnd)
+
   db.none(updateEnd)
     .then(() => {
       res.sendStatus(200);
     })
-    .catch((err) => {
-      res.send(err);
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
 });
 
