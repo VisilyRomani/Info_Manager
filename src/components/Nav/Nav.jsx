@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { NavData } from "./NavData";
 import * as FaIcons from "react-icons/fa";
 import { IconContext } from "react-icons";
-import "../../css/Nav.css";
 
 function Nav(props) {
   const [sidebar, setSidebar] = useState(false);

@@ -13,15 +13,13 @@ function login(username, password) {
   );
 }
 
-// const register = () => {
-//   return axios.post("/auth/register", {
-//     username: "sprouts-admin",
-//     password: "sprouts8970",
-//   });
-// };
+function register(username, password,firstName, lastName){
+  return axios.post("/auth/register", { username, password,firstName, lastName });
+};
 
 const authService = {
   login,
   checkLogin,
+  register
 };
 export default authService;

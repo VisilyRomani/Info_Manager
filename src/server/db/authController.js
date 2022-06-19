@@ -1,17 +1,29 @@
-const db = require("./database");
+const db = require("../database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { ParameterizedQuery } = require("pg-promise");
 
-// exports.reg = (req, res) => {
-//   // console.log(req.body)
-//   bcrypt.hash(req.body.password, 10, (err, hash) => {
-//     db.db.none(
-//       "INSERT INTO users(username, password) VALUES(${username},${password})",
-//       { username: req.body.username, password: hash }
-//     );
-//   });
-// };
+exports.reg = (req, res) => {
+  let { username, password, firstName, lastName } = req.body;
+  bcrypt.hash(password, 10, (err, hash) => {
+    db.db
+      .none(
+        "INSERT INTO users(username, password, first_name, last_name) VALUES(${username},${password},${first_name},${last_name})",
+        {
+          username: username,
+          password: hash,
+          first_name: firstName,
+          last_name: lastName,
+        }
+      )
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.sendStatus(err);
+      });
+  });
+};
 
 exports.check = (req, res) => {
   try {
